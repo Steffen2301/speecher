@@ -105,9 +105,9 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · `[!]` blockiert
 - [x] Statusmeldungen in AppState lokalisiert
 
 ### 1.9 Tests
-- [ ] Unit-Tests: `SettingsStore`
-- [ ] Unit-Tests: `ASRService` (Mock-Implementierung)
-- [ ] Unit-Tests: `CorrectionService` (Mock-Implementierung)
+- [x] Build-Test: Xcode 16.4, macOS 15.5 SDK → BUILD SUCCEEDED (2026-06-10)
+- [x] Unit-Tests: 35/35 bestanden (AudioEngine, ASR, WAV, Keychain, Correction, Output)
+- [x] Manueller Test: Onboarding + Hauptfenster auf Deutsch korrekt
 - [ ] Unit-Tests: Sprachenerkennung und Routing (Übersetzung aktiv/inaktiv)
 - [ ] Integrations-Tests: Audio-Chunk-Verarbeitung
 - [ ] UI-Tests: Grundfluss (Aufnahme starten → Text erscheint)
