@@ -2,25 +2,18 @@ import SwiftUI
 
 struct ToolbarView: View {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var locale: LocalizationManager
 
     private let languages = [
-        ("de", "Deutsch"),
-        ("en", "English"),
-        ("fr", "Français"),
-        ("es", "Español"),
-        ("it", "Italiano"),
-        ("pt", "Português"),
-        ("nl", "Nederlands"),
-        ("pl", "Polski"),
-        ("ru", "Русский"),
-        ("zh", "中文"),
-        ("ja", "日本語"),
-        ("ar", "العربية"),
+        ("de", "Deutsch"), ("en", "English"), ("fr", "Français"),
+        ("es", "Español"), ("it", "Italiano"), ("pt", "Português"),
+        ("nl", "Nederlands"), ("pl", "Polski"), ("ru", "Русский"),
+        ("zh", "中文"), ("ja", "日本語"), ("ar", "العربية"),
     ]
 
     var body: some View {
         HStack(spacing: 16) {
-            Label("Eingang", systemImage: "mic")
+            Label(locale.t("toolbar.input"), systemImage: "mic")
                 .foregroundStyle(.secondary)
                 .font(.caption)
 
@@ -35,7 +28,7 @@ struct ToolbarView: View {
             Image(systemName: "arrow.right")
                 .foregroundStyle(.secondary)
 
-            Label("Ausgang", systemImage: "text.bubble")
+            Label(locale.t("toolbar.output"), systemImage: "text.bubble")
                 .foregroundStyle(.secondary)
                 .font(.caption)
 
@@ -50,7 +43,7 @@ struct ToolbarView: View {
             Spacer()
 
             if appState.inputLanguage != appState.outputLanguage {
-                Label("Übersetzung aktiv", systemImage: "globe")
+                Label(locale.t("toolbar.translation_active"), systemImage: "globe")
                     .font(.caption)
                     .foregroundStyle(.blue)
             }

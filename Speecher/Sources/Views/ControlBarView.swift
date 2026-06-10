@@ -3,6 +3,7 @@ import SpeecherCore
 
 struct ControlBarView: View {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var locale: LocalizationManager
 
     var body: some View {
         HStack(spacing: 12) {
@@ -11,7 +12,7 @@ struct ControlBarView: View {
                 appState.toggleRecording()
             } label: {
                 Label(
-                    appState.isRecording ? "Stopp" : "Aufnahme",
+                    appState.isRecording ? locale.t("control.stop") : locale.t("control.record"),
                     systemImage: appState.isRecording ? "stop.circle.fill" : "mic.circle.fill"
                 )
                 .foregroundStyle(appState.isRecording ? .red : .accentColor)
@@ -20,7 +21,7 @@ struct ControlBarView: View {
             .buttonStyle(.plain)
             .keyboardShortcut("m", modifiers: [.command, .shift])
 
-            // VU-Meter (nur während Aufnahme)
+            // VU-Meter
             if appState.isRecording {
                 LevelMeterView(level: appState.audioRecorder.inputLevel)
                     .frame(width: 80, height: 14)
@@ -28,10 +29,8 @@ struct ControlBarView: View {
             }
 
             // Datei importieren
-            Button {
-                openFileImport()
-            } label: {
-                Label("Datei", systemImage: "doc.badge.plus")
+            Button { openFileImport() } label: {
+                Label(locale.t("control.import_file"), systemImage: "doc.badge.plus")
             }
             .buttonStyle(.bordered)
 
@@ -48,7 +47,7 @@ struct ControlBarView: View {
                     .transition(.opacity)
             }
 
-            // Statusanzeige
+            // Statusanzeige / Fehler
             if let error = appState.errorMessage {
                 Label(error, systemImage: "exclamationmark.triangle")
                     .font(.caption)
@@ -65,7 +64,7 @@ struct ControlBarView: View {
                 NSPasteboard.general.clearContents()
                 NSPasteboard.general.setString(appState.transcribedText, forType: .string)
             } label: {
-                Label("Kopieren", systemImage: "doc.on.doc")
+                Label(locale.t("control.copy"), systemImage: "doc.on.doc")
             }
             .buttonStyle(.bordered)
             .disabled(appState.transcribedText.isEmpty)
@@ -74,8 +73,9 @@ struct ControlBarView: View {
             Button {
                 appState.transcribedText = ""
                 appState.errorMessage = nil
+                appState.lastOutputResult = nil
             } label: {
-                Label("Löschen", systemImage: "trash")
+                Label(locale.t("control.clear"), systemImage: "trash")
             }
             .buttonStyle(.bordered)
             .disabled(appState.transcribedText.isEmpty)
@@ -90,22 +90,18 @@ struct ControlBarView: View {
         panel.allowedContentTypes = []
         panel.allowsMultipleSelection = false
         panel.canChooseDirectories = false
-        panel.title = "Audiodatei öffnen"
-        panel.message = "Unterstützte Formate: MP3, M4A, WAV, AIFF, FLAC, CAF, MP4"
-
+        panel.title = locale.t("file_panel.title")
+        panel.message = locale.t("file_panel.message")
         if panel.runModal() == .OK, let url = panel.url {
-            processAudioFile(url: url)
+            appState.transcribeFile(url: url)
         }
-    }
-
-    private func processAudioFile(url: URL) {
-        appState.transcribeFile(url: url)
     }
 }
 
 // MARK: - Output-Indikator
 
 private struct OutputResultBadge: View {
+    @EnvironmentObject private var locale: LocalizationManager
     let result: OutputResult
 
     var body: some View {
@@ -128,10 +124,10 @@ private struct OutputResultBadge: View {
 
     private var label: String {
         switch result {
-        case .insertedAtCursor:    return "An Cursor"
-        case .pastedViaSimulation: return "Eingefügt"
-        case .copiedToClipboard:   return "Zwischenablage"
-        case .noTargetSaved:       return "Textfeld"
+        case .insertedAtCursor:    return locale.t("output.at_cursor")
+        case .pastedViaSimulation: return locale.t("output.inserted")
+        case .copiedToClipboard:   return locale.t("output.clipboard")
+        case .noTargetSaved:       return locale.t("output.textfield")
         }
     }
 
@@ -147,13 +143,12 @@ private struct OutputResultBadge: View {
 // MARK: - VU-Meter
 
 private struct LevelMeterView: View {
-    let level: Float   // 0.0 – 1.0
+    let level: Float
 
     var body: some View {
         GeometryReader { geo in
             ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 3)
-                    .fill(.quaternary)
+                RoundedRectangle(cornerRadius: 3).fill(.quaternary)
                 RoundedRectangle(cornerRadius: 3)
                     .fill(meterColor)
                     .frame(width: geo.size.width * CGFloat(level))
@@ -163,9 +158,9 @@ private struct LevelMeterView: View {
 
     private var meterColor: Color {
         switch level {
-        case 0..<0.6:  return .green
+        case 0..<0.6:    return .green
         case 0.6..<0.85: return .yellow
-        default:       return .red
+        default:         return .red
         }
     }
 }

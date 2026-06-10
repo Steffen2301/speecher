@@ -1,0 +1,101 @@
+/* Toolbar */
+"toolbar.input" = "Eingang";
+"toolbar.output" = "Ausgang";
+"toolbar.translation_active" = "Übersetzung aktiv";
+
+/* Transcription */
+"transcription.placeholder_idle" = "Aufnahme-Button drücken oder ⌘⇧M zum Starten.";
+"transcription.placeholder_recording" = "Aufnahme läuft …";
+
+/* Control Bar */
+"control.record" = "Aufnahme";
+"control.stop" = "Stopp";
+"control.import_file" = "Datei";
+"control.copy" = "Kopieren";
+"control.clear" = "Löschen";
+"control.loading" = "Wird geladen …";
+
+/* File Panel */
+"file_panel.title" = "Audiodatei öffnen";
+"file_panel.message" = "Unterstützte Formate: MP3, M4A, WAV, AIFF, FLAC, CAF, MP4";
+
+/* Output Result Badge */
+"output.at_cursor" = "An Cursor";
+"output.inserted" = "Eingefügt";
+"output.clipboard" = "Zwischenablage";
+"output.textfield" = "Textfeld";
+
+/* Menu Bar */
+"menubar.start_recording" = "Aufnahme starten";
+"menubar.stop_recording" = "Aufnahme stoppen";
+"menubar.open_speecher" = "Speecher öffnen";
+"menubar.settings" = "Einstellungen …";
+"menubar.quit" = "Beenden";
+
+/* Onboarding */
+"onboarding.title" = "Bedienungshilfen erlauben";
+"onboarding.description" = "Speecher benötigt Zugriff auf die Bedienungshilfen, um Text direkt an der Cursor-Position in anderen Apps einzufügen (Mail, Word, Pages …).";
+"onboarding.granted" = "Berechtigung erteilt";
+"onboarding.done" = "Fertig";
+"onboarding.open_settings" = "Systemeinstellungen öffnen";
+"onboarding.check" = "Prüfen";
+"onboarding.check_hint" = "Nach dem Erlauben bitte „Prüfen" drücken.";
+"onboarding.skip" = "Ohne Accessibility fortfahren";
+"onboarding.skip_hint" = "Ohne Berechtigung wird Text in die Zwischenablage kopiert.";
+
+/* Settings Tabs */
+"settings.tab.general" = "Allgemein";
+"settings.tab.speech" = "Sprache";
+"settings.tab.correction" = "Korrektur";
+"settings.tab.microphone" = "Mikrofon";
+
+/* Settings – General */
+"settings.ui_language" = "Oberflächen-Sprache";
+
+/* Settings – ASR */
+"settings.asr.section" = "Spracherkennung";
+"settings.asr.backend" = "Backend";
+"settings.asr.whisperkit" = "WhisperKit (lokal, on-device)";
+"settings.asr.apple_speech" = "Apple Speech (leichtgewichtig)";
+"settings.asr.model_section" = "Whisper-Modell";
+"settings.asr.model_picker" = "Modell";
+"settings.asr.download_hint" = "Einmalig herunterladen – danach vollständig offline.";
+"settings.asr.ready" = "Bereit";
+"settings.asr.downloading" = "Wird geladen …";
+"settings.asr.delete" = "Löschen";
+"settings.asr.retry" = "Erneut versuchen";
+"settings.asr.download_btn" = "Laden (%d MB)";
+
+/* Settings – Correction */
+"settings.correction.free_section" = "Kostenlose Backends";
+"settings.correction.paid_section" = "Kostenpflichtige Backends";
+"settings.correction.ollama_section" = "Ollama-Einstellungen";
+"settings.correction.ollama_model" = "Modell";
+"settings.correction.ollama_host" = "Host";
+"settings.correction.check_connection" = "Verbindung prüfen";
+"settings.correction.reachable" = "Erreichbar";
+"settings.correction.not_reachable" = "Nicht erreichbar";
+"settings.correction.ollama_hint" = "Installieren: https://ollama.com  •  Laden: ollama pull llama3.2";
+"settings.correction.anthropic_key" = "Anthropic API-Key";
+"settings.correction.openai_key" = "OpenAI API-Key";
+"settings.correction.save" = "Speichern";
+
+/* Settings – Microphone */
+"settings.mic.section" = "Eingabegerät";
+"settings.mic.picker" = "Mikrofon";
+"settings.mic.refresh" = "Geräteliste aktualisieren";
+
+/* App Commands */
+"commands.recording_menu" = "Aufnahme";
+"commands.toggle" = "Aufnahme starten / stoppen";
+
+/* Status Messages */
+"status.loading_model" = "Lade Modell …";
+"status.recording" = "Aufnahme läuft …";
+"status.no_speech" = "Keine Sprache erkannt.";
+"status.inserted_cursor" = "✓ An Cursor eingefügt";
+"status.inserted_paste" = "✓ Eingefügt (Cmd+V)";
+"status.clipboard_hint" = "In Zwischenablage · ⌘V zum Einfügen";
+"status.no_target" = "Kein Ziel gespeichert · Text im Textfeld";
+"status.processing_segment" = "Segment %d wird verarbeitet …";
+"status.done_segments" = "%d Segment(e) fertig.";

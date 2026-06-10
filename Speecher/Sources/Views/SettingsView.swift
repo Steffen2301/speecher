@@ -3,20 +3,22 @@ import SpeecherCore
 
 struct SettingsView: View {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var locale: LocalizationManager
 
     var body: some View {
         TabView {
             GeneralSettingsTab()
-                .tabItem { Label("Allgemein", systemImage: "gear") }
+                .tabItem { Label(locale.t("settings.tab.general"), systemImage: "gear") }
             ASRSettingsTab()
-                .tabItem { Label("Sprache", systemImage: "waveform") }
+                .tabItem { Label(locale.t("settings.tab.speech"), systemImage: "waveform") }
             CorrectionSettingsTab()
-                .tabItem { Label("Korrektur", systemImage: "text.badge.checkmark") }
+                .tabItem { Label(locale.t("settings.tab.correction"), systemImage: "text.badge.checkmark") }
             MicrophoneSettingsTab()
-                .tabItem { Label("Mikrofon", systemImage: "mic") }
+                .tabItem { Label(locale.t("settings.tab.microphone"), systemImage: "mic") }
         }
         .frame(width: 560, height: 460)
         .environmentObject(appState)
+        .environmentObject(locale)
     }
 }
 
@@ -24,12 +26,17 @@ struct SettingsView: View {
 
 private struct GeneralSettingsTab: View {
     @EnvironmentObject private var appState: AppState
-    private let uiLanguages = [("de", "Deutsch"), ("en", "English")]
+    @EnvironmentObject private var locale: LocalizationManager
 
     var body: some View {
         Form {
-            Picker("Oberflächen-Sprache", selection: $appState.uiLanguage) {
-                ForEach(uiLanguages, id: \.0) { Text($1).tag($0) }
+            Picker(locale.t("settings.ui_language"), selection: Binding(
+                get: { locale.language },
+                set: { locale.setLanguage($0) }
+            )) {
+                ForEach(LocalizationManager.supported, id: \.code) { lang in
+                    Text(lang.name).tag(lang.code)
+                }
             }
         }
         .padding(20)
@@ -40,20 +47,21 @@ private struct GeneralSettingsTab: View {
 
 private struct ASRSettingsTab: View {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var locale: LocalizationManager
 
     var body: some View {
         Form {
-            Section("Spracherkennung") {
-                Picker("Backend", selection: $appState.asrMode) {
-                    Text("WhisperKit (lokal, on-device)").tag(AppState.ASRMode.whisperKit)
-                    Text("Apple Speech (leichtgewichtig)").tag(AppState.ASRMode.appleSpeech)
+            Section(locale.t("settings.asr.section")) {
+                Picker(locale.t("settings.asr.backend"), selection: $appState.asrMode) {
+                    Text(locale.t("settings.asr.whisperkit")).tag(AppState.ASRMode.whisperKit)
+                    Text(locale.t("settings.asr.apple_speech")).tag(AppState.ASRMode.appleSpeech)
                 }
                 .pickerStyle(.radioGroup)
             }
 
             if appState.asrMode == .whisperKit {
-                Section("Whisper-Modell") {
-                    Picker("Modell", selection: $appState.whisperModel) {
+                Section(locale.t("settings.asr.model_section")) {
+                    Picker(locale.t("settings.asr.model_picker"), selection: $appState.whisperModel) {
                         ForEach(WhisperKitService.WhisperModel.allCases, id: \.self) {
                             Text($0.displayName).tag($0)
                         }
@@ -62,8 +70,9 @@ private struct ASRSettingsTab: View {
                         Spacer()
                         ModelActionButton(model: appState.whisperModel)
                             .environmentObject(appState.modelDownloadManager)
+                            .environmentObject(locale)
                     }
-                    Text("Einmalig herunterladen – danach vollständig offline.")
+                    Text(locale.t("settings.asr.download_hint"))
                         .font(.caption).foregroundStyle(.secondary)
                 }
             }
@@ -75,28 +84,34 @@ private struct ASRSettingsTab: View {
 private struct ModelActionButton: View {
     let model: WhisperKitService.WhisperModel
     @EnvironmentObject private var manager: ModelDownloadManager
+    @EnvironmentObject private var locale: LocalizationManager
 
     var body: some View {
         switch manager.states[model] ?? .notDownloaded {
         case .notDownloaded:
-            Button("Laden (\(model.approximateSizeMB) MB)") { manager.download(model) }
-                .buttonStyle(.borderedProminent).controlSize(.small)
+            Button(locale.t("settings.asr.download_btn", model.approximateSizeMB)) {
+                manager.download(model)
+            }
+            .buttonStyle(.borderedProminent).controlSize(.small)
+
         case .downloading:
             HStack(spacing: 8) {
                 ProgressView().controlSize(.small)
-                Text("Wird geladen …").font(.caption).foregroundStyle(.secondary)
+                Text(locale.t("settings.asr.downloading")).font(.caption).foregroundStyle(.secondary)
             }
+
         case .downloaded:
             HStack(spacing: 6) {
                 Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
-                Text("Bereit").font(.caption)
-                Button("Löschen") { manager.delete(model) }
+                Text(locale.t("settings.asr.ready")).font(.caption)
+                Button(locale.t("settings.asr.delete")) { manager.delete(model) }
                     .buttonStyle(.bordered).controlSize(.small)
             }
+
         case .failed(let msg):
             VStack(alignment: .trailing, spacing: 4) {
                 Text(msg).font(.caption).foregroundStyle(.red).lineLimit(2)
-                Button("Erneut versuchen") { manager.download(model) }
+                Button(locale.t("settings.asr.retry")) { manager.download(model) }
                     .buttonStyle(.bordered).controlSize(.small)
             }
         }
@@ -107,62 +122,62 @@ private struct ModelActionButton: View {
 
 private struct CorrectionSettingsTab: View {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var locale: LocalizationManager
     @State private var anthropicKey = ""
     @State private var openAIKey = ""
     @State private var keySaveError: String?
-    @State private var ollamaReachable: Bool? = nil
+    @State private var ollamaReachable: Bool?
 
-    private let freeOptions   = CorrectionServiceFactory.Mode.allCases.filter {  $0.isFree }
-    private let paidOptions   = CorrectionServiceFactory.Mode.allCases.filter { !$0.isFree }
+    private let freeOptions = CorrectionServiceFactory.Mode.allCases.filter {  $0.isFree }
+    private let paidOptions = CorrectionServiceFactory.Mode.allCases.filter { !$0.isFree }
 
     var body: some View {
         Form {
-            Section("Kostenlose Backends") {
-                ForEach(freeOptions, id: \.self) { mode in
-                    modeRow(mode)
-                }
+            Section(locale.t("settings.correction.free_section")) {
+                ForEach(freeOptions, id: \.self) { modeRow($0) }
             }
 
-            Section("Kostenpflichtige Backends") {
-                ForEach(paidOptions, id: \.self) { mode in
-                    modeRow(mode)
-                }
+            Section(locale.t("settings.correction.paid_section")) {
+                ForEach(paidOptions, id: \.self) { modeRow($0) }
             }
 
-            // Ollama-Einstellungen
             if appState.correctionMode == .ollama {
-                Section("Ollama-Einstellungen") {
+                Section(locale.t("settings.correction.ollama_section")) {
                     HStack {
-                        TextField("Modell", text: $appState.ollamaModel)
+                        TextField(locale.t("settings.correction.ollama_model"), text: $appState.ollamaModel)
                             .textFieldStyle(.roundedBorder)
-                        TextField("Host", text: $appState.ollamaHost)
+                        TextField(locale.t("settings.correction.ollama_host"), text: $appState.ollamaHost)
                             .textFieldStyle(.roundedBorder)
                             .frame(width: 180)
                     }
                     HStack {
-                        Button("Verbindung prüfen") { Task { await checkOllama() } }
-                            .buttonStyle(.bordered).controlSize(.small)
+                        Button(locale.t("settings.correction.check_connection")) {
+                            Task { await checkOllama() }
+                        }
+                        .buttonStyle(.bordered).controlSize(.small)
+
                         if let ok = ollamaReachable {
                             Image(systemName: ok ? "checkmark.circle.fill" : "xmark.circle.fill")
                                 .foregroundStyle(ok ? .green : .red)
-                            Text(ok ? "Erreichbar" : "Nicht erreichbar")
+                            Text(ok ? locale.t("settings.correction.reachable")
+                                    : locale.t("settings.correction.not_reachable"))
                                 .font(.caption)
                         }
                     }
-                    Text("Installieren: https://ollama.com  •  Modell laden: ollama pull llama3.2")
+                    Text(locale.t("settings.correction.ollama_hint"))
                         .font(.caption).foregroundStyle(.secondary)
                 }
             }
 
-            // API-Keys
             if appState.correctionMode == .claudeAPI {
-                Section("Anthropic API-Key") {
+                Section(locale.t("settings.correction.anthropic_key")) {
                     SecureField("sk-ant-…", text: $anthropicKey)
                     saveButton { try KeychainManager.save(anthropicKey, for: .anthropic) }
                 }
             }
+
             if appState.correctionMode == .openAI {
-                Section("OpenAI API-Key") {
+                Section(locale.t("settings.correction.openai_key")) {
                     SecureField("sk-…", text: $openAIKey)
                     saveButton { try KeychainManager.save(openAIKey, for: .openAI) }
                 }
@@ -183,9 +198,7 @@ private struct CorrectionSettingsTab: View {
         HStack {
             Image(systemName: appState.correctionMode == mode ? "largecircle.fill.circle" : "circle")
                 .foregroundStyle(appState.correctionMode == mode ? .accentColor : .secondary)
-            VStack(alignment: .leading, spacing: 1) {
-                Text(mode.displayName).font(.body)
-            }
+            Text(mode.displayName).font(.body)
             Spacer()
         }
         .contentShape(Rectangle())
@@ -193,7 +206,7 @@ private struct CorrectionSettingsTab: View {
     }
 
     private func saveButton(action: @escaping () throws -> Void) -> some View {
-        Button("Speichern") {
+        Button(locale.t("settings.correction.save")) {
             do { try action(); keySaveError = nil }
             catch { keySaveError = error.localizedDescription }
         }
@@ -213,17 +226,20 @@ private struct CorrectionSettingsTab: View {
 
 private struct MicrophoneSettingsTab: View {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var locale: LocalizationManager
 
     var body: some View {
         Form {
-            Section("Eingabegerät") {
-                Picker("Mikrofon", selection: $appState.audioDeviceManager.selectedDevice) {
+            Section(locale.t("settings.mic.section")) {
+                Picker(locale.t("settings.mic.picker"), selection: $appState.audioDeviceManager.selectedDevice) {
                     ForEach(appState.audioDeviceManager.inputDevices) { device in
                         Text(device.name).tag(device)
                     }
                 }
-                Button("Geräteliste aktualisieren") { appState.audioDeviceManager.refresh() }
-                    .buttonStyle(.link)
+                Button(locale.t("settings.mic.refresh")) {
+                    appState.audioDeviceManager.refresh()
+                }
+                .buttonStyle(.link)
             }
         }
         .padding(20)

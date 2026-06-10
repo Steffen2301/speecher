@@ -36,6 +36,9 @@ final class AppState: ObservableObject {
     let modelDownloadManager = ModelDownloadManager()
     let outputService        = AccessibilityOutputService()
 
+    // Wird von SpeecherApp gesetzt, damit Statusmeldungen lokalisiert sind
+    var locale: LocalizationManager?
+
     enum ASRMode: String, CaseIterable {
         case whisperKit  = "whisperKit"
         case appleSpeech = "appleSpeech"
@@ -56,7 +59,7 @@ final class AppState: ObservableObject {
     private func startRecording() async {
         guard await ensureMicrophonePermission() else { return }
 
-        statusMessage = "Lade Modell …"
+        statusMessage = locale?.t("status.loading_model") ?? "Lade Modell …"
         let asrService        = makeASRService()
         let correctionService = makeCorrectionService()
 
@@ -70,7 +73,7 @@ final class AppState: ObservableObject {
             try audioDeviceManager.applySelection()
             try audioRecorder.start()
             isRecording = true
-            statusMessage = "Aufnahme läuft …"
+            statusMessage = locale?.t("status.recording") ?? "Aufnahme läuft …"
         } catch {
             errorMessage = error.localizedDescription
             statusMessage = ""
@@ -180,11 +183,12 @@ final class AppState: ObservableObject {
     // MARK: - Helper
 
     private func outputResultMessage(_ result: OutputResult, backend: String) -> String {
+        let l = locale
         switch result {
-        case .insertedAtCursor:     return "✓ An Cursor eingefügt · \(backend)"
-        case .pastedViaSimulation:  return "✓ Eingefügt (Cmd+V) · \(backend)"
-        case .copiedToClipboard:    return "In Zwischenablage · ⌘V zum Einfügen"
-        case .noTargetSaved:        return "Kein Ziel gespeichert · Text im Textfeld"
+        case .insertedAtCursor:    return "\(l?.t("status.inserted_cursor") ?? "✓ An Cursor eingefügt") · \(backend)"
+        case .pastedViaSimulation: return "\(l?.t("status.inserted_paste")  ?? "✓ Eingefügt (Cmd+V)") · \(backend)"
+        case .copiedToClipboard:   return l?.t("status.clipboard_hint") ?? "In Zwischenablage · ⌘V zum Einfügen"
+        case .noTargetSaved:       return l?.t("status.no_target")      ?? "Kein Ziel gespeichert · Text im Textfeld"
         }
     }
 

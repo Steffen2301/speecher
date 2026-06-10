@@ -2,6 +2,7 @@ import SwiftUI
 
 struct TranscriptionView: View {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var locale: LocalizationManager
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -11,8 +12,8 @@ struct TranscriptionView: View {
 
             if appState.transcribedText.isEmpty {
                 Text(appState.isRecording
-                     ? "Aufnahme läuft …"
-                     : "Drücken Sie den Aufnahme-Button oder ⌘⇧M zum Starten.")
+                     ? locale.t("transcription.placeholder_recording")
+                     : locale.t("transcription.placeholder_idle"))
                     .foregroundStyle(.tertiary)
                     .font(.body)
                     .padding(16)

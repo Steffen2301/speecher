@@ -1,0 +1,101 @@
+/* Toolbar */
+"toolbar.input" = "Input";
+"toolbar.output" = "Output";
+"toolbar.translation_active" = "Translation active";
+
+/* Transcription */
+"transcription.placeholder_idle" = "Press the Record button or ⌘⇧M to start.";
+"transcription.placeholder_recording" = "Recording…";
+
+/* Control Bar */
+"control.record" = "Record";
+"control.stop" = "Stop";
+"control.import_file" = "File";
+"control.copy" = "Copy";
+"control.clear" = "Clear";
+"control.loading" = "Loading…";
+
+/* File Panel */
+"file_panel.title" = "Open Audio File";
+"file_panel.message" = "Supported formats: MP3, M4A, WAV, AIFF, FLAC, CAF, MP4";
+
+/* Output Result Badge */
+"output.at_cursor" = "At Cursor";
+"output.inserted" = "Inserted";
+"output.clipboard" = "Clipboard";
+"output.textfield" = "Text Field";
+
+/* Menu Bar */
+"menubar.start_recording" = "Start Recording";
+"menubar.stop_recording" = "Stop Recording";
+"menubar.open_speecher" = "Open Speecher";
+"menubar.settings" = "Settings…";
+"menubar.quit" = "Quit";
+
+/* Onboarding */
+"onboarding.title" = "Allow Accessibility Access";
+"onboarding.description" = "Speecher needs Accessibility access to insert text directly at the cursor position in other apps (Mail, Word, Pages…).";
+"onboarding.granted" = "Permission Granted";
+"onboarding.done" = "Done";
+"onboarding.open_settings" = "Open System Settings";
+"onboarding.check" = "Check";
+"onboarding.check_hint" = "After allowing, press \"Check\".";
+"onboarding.skip" = "Continue without Accessibility";
+"onboarding.skip_hint" = "Without permission, text will be copied to the clipboard.";
+
+/* Settings Tabs */
+"settings.tab.general" = "General";
+"settings.tab.speech" = "Speech";
+"settings.tab.correction" = "Correction";
+"settings.tab.microphone" = "Microphone";
+
+/* Settings – General */
+"settings.ui_language" = "Interface Language";
+
+/* Settings – ASR */
+"settings.asr.section" = "Speech Recognition";
+"settings.asr.backend" = "Backend";
+"settings.asr.whisperkit" = "WhisperKit (local, on-device)";
+"settings.asr.apple_speech" = "Apple Speech (lightweight)";
+"settings.asr.model_section" = "Whisper Model";
+"settings.asr.model_picker" = "Model";
+"settings.asr.download_hint" = "Download once – then fully offline.";
+"settings.asr.ready" = "Ready";
+"settings.asr.downloading" = "Downloading…";
+"settings.asr.delete" = "Delete";
+"settings.asr.retry" = "Retry";
+"settings.asr.download_btn" = "Download (%d MB)";
+
+/* Settings – Correction */
+"settings.correction.free_section" = "Free Backends";
+"settings.correction.paid_section" = "Paid Backends";
+"settings.correction.ollama_section" = "Ollama Settings";
+"settings.correction.ollama_model" = "Model";
+"settings.correction.ollama_host" = "Host";
+"settings.correction.check_connection" = "Check Connection";
+"settings.correction.reachable" = "Reachable";
+"settings.correction.not_reachable" = "Not Reachable";
+"settings.correction.ollama_hint" = "Install: https://ollama.com  •  Load: ollama pull llama3.2";
+"settings.correction.anthropic_key" = "Anthropic API Key";
+"settings.correction.openai_key" = "OpenAI API Key";
+"settings.correction.save" = "Save";
+
+/* Settings – Microphone */
+"settings.mic.section" = "Input Device";
+"settings.mic.picker" = "Microphone";
+"settings.mic.refresh" = "Refresh Device List";
+
+/* App Commands */
+"commands.recording_menu" = "Recording";
+"commands.toggle" = "Start / Stop Recording";
+
+/* Status Messages */
+"status.loading_model" = "Loading model…";
+"status.recording" = "Recording…";
+"status.no_speech" = "No speech detected.";
+"status.inserted_cursor" = "✓ Inserted at cursor";
+"status.inserted_paste" = "✓ Inserted (Cmd+V)";
+"status.clipboard_hint" = "In Clipboard · ⌘V to Paste";
+"status.no_target" = "No target saved · Text in field";
+"status.processing_segment" = "Processing segment %d…";
+"status.done_segments" = "%d segment(s) complete.";

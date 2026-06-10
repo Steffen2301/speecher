@@ -1,8 +1,8 @@
 import SwiftUI
 
-/// Erklärt die Accessibility-Berechtigung und führt den Nutzer zur Systemeinstellung.
 struct OnboardingView: View {
     @EnvironmentObject private var appState: AppState
+    @EnvironmentObject private var locale: LocalizationManager
     @State private var isGranted = AccessibilityPermission.isGranted
 
     var body: some View {
@@ -12,47 +12,49 @@ struct OnboardingView: View {
                 .foregroundStyle(.blue)
 
             VStack(spacing: 8) {
-                Text("Bedienungshilfen erlauben")
+                Text(locale.t("onboarding.title"))
                     .font(.title2).bold()
-                Text("Speecher benötigt Zugriff auf die Bedienungshilfen, um Text direkt an der Cursor-Position in anderen Apps einzufügen (Mail, Word, Pages …).")
+                Text(locale.t("onboarding.description"))
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
             }
 
             if isGranted {
-                Label("Berechtigung erteilt", systemImage: "checkmark.circle.fill")
+                Label(locale.t("onboarding.granted"), systemImage: "checkmark.circle.fill")
                     .foregroundStyle(.green)
                     .font(.headline)
 
-                Button("Fertig") { appState.hasCompletedOnboarding = true }
-                    .buttonStyle(.borderedProminent)
+                Button(locale.t("onboarding.done")) {
+                    appState.hasCompletedOnboarding = true
+                }
+                .buttonStyle(.borderedProminent)
             } else {
                 VStack(spacing: 12) {
-                    Button("Systemeinstellungen öffnen") {
+                    Button(locale.t("onboarding.open_settings")) {
                         AccessibilityPermission.openSystemSettings()
                     }
                     .buttonStyle(.borderedProminent)
 
-                    Button("Prüfen") {
+                    Button(locale.t("onboarding.check")) {
                         isGranted = AccessibilityPermission.isGranted
                     }
                     .buttonStyle(.bordered)
 
-                    Text("Nach dem Erlauben bitte „Prüfen" drücken.")
+                    Text(locale.t("onboarding.check_hint"))
                         .font(.caption).foregroundStyle(.secondary)
                 }
             }
 
             Divider()
 
-            Button("Ohne Accessibility fortfahren") {
+            Button(locale.t("onboarding.skip")) {
                 appState.hasCompletedOnboarding = true
             }
             .buttonStyle(.plain)
             .foregroundStyle(.secondary)
             .font(.caption)
 
-            Text("Ohne Berechtigung wird Text in die Zwischenablage kopiert.")
+            Text(locale.t("onboarding.skip_hint"))
                 .font(.caption2).foregroundStyle(.tertiary)
         }
         .padding(32)
