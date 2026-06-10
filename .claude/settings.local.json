@@ -22,7 +22,8 @@
       "Bash(open \"/Users/steffen/Library/Developer/Xcode/DerivedData/Speecher-gunuuyhcpjkneifzfmadvaqyqpds/Build/Products/Debug/Speecher.app\")",
       "Bash(python3 -c ' *)",
       "Bash(python3 *)",
-      "Bash(defaults delete *)"
+      "Bash(defaults delete *)",
+      "Bash(afplay /tmp/test_speech.aiff)"
     ]
   }
 }

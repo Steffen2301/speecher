@@ -63,6 +63,11 @@ final class AppState: ObservableObject {
         let asrService        = makeASRService()
         let correctionService = makeCorrectionService()
 
+        // Neues Diktat: Textfeld und Fehler zurücksetzen
+        transcribedText = ""
+        errorMessage = nil
+        lastOutputResult = nil
+
         audioRecorder.onChunk = { @Sendable [weak self] chunk in
             Task { [weak self] in
                 await self?.handleChunk(chunk, asr: asrService, correction: correctionService)
@@ -81,6 +86,8 @@ final class AppState: ObservableObject {
     }
 
     private func stopRecording() {
+        // onChunk auf nil setzen BEVOR stop() den Flush-Chunk sendet
+        audioRecorder.onChunk = nil
         audioRecorder.stop()
         isRecording = false
         statusMessage = ""
@@ -112,8 +119,8 @@ final class AppState: ObservableObject {
             lastOutputResult = outputResult
             statusMessage = outputResultMessage(outputResult, backend: corrResult.backend)
 
-            // Immer auch ins eigene Textfeld schreiben (Protokoll / Fallback-Anzeige)
-            if !transcribedText.isEmpty { transcribedText += "\n" }
+            // Immer auch ins eigene Textfeld schreiben
+            if !transcribedText.isEmpty { transcribedText += " " }
             transcribedText += text
 
         } catch {

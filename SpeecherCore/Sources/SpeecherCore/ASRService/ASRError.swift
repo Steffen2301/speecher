@@ -13,7 +13,7 @@ public enum ASRError: LocalizedError {
         case .modelNotLoaded(let name):
             return "Modell '\(name)' konnte nicht geladen werden. Bitte in den Einstellungen herunterladen."
         case .networkError(let error):
-            return "Netzwerkfehler beim Modell-Download: \(error.localizedDescription)"
+            return "Spracherkennung fehlgeschlagen: \(error.localizedDescription)"
         case .inferenceError(let detail):
             return "Transkription fehlgeschlagen: \(detail)"
         case .permissionDenied:
