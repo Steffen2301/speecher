@@ -13,7 +13,7 @@ final class AccessibilityOutputService: OutputService {
     private var savedElement: AXUIElement?
     private var savedApp: NSRunningApplication?
 
-    nonisolated var isAccessibilityGranted: Bool {
+    var isAccessibilityGranted: Bool {
         AccessibilityPermission.isGranted
     }
 

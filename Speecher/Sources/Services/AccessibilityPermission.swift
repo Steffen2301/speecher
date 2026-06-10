@@ -13,8 +13,9 @@ enum AccessibilityPermission {
     @discardableResult
     static func requestIfNeeded() -> Bool {
         if isGranted { return true }
-        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true]
-        return AXIsProcessTrustedWithOptions(options as CFDictionary)
+        // "AXTrustedCheckOptionPrompt" ist der Raw-Value von kAXTrustedCheckOptionPrompt
+        let options: CFDictionary = ["AXTrustedCheckOptionPrompt": true] as CFDictionary
+        return AXIsProcessTrustedWithOptions(options)
     }
 
     /// Öffnet die Systemeinstellungen direkt auf der Bedienungshilfen-Seite.

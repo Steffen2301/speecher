@@ -197,7 +197,7 @@ private struct CorrectionSettingsTab: View {
     private func modeRow(_ mode: CorrectionServiceFactory.Mode) -> some View {
         HStack {
             Image(systemName: appState.correctionMode == mode ? "largecircle.fill.circle" : "circle")
-                .foregroundStyle(appState.correctionMode == mode ? .accentColor : .secondary)
+                .foregroundStyle(appState.correctionMode == mode ? Color.accentColor : Color.secondary)
             Text(mode.displayName).font(.body)
             Spacer()
         }
@@ -231,7 +231,10 @@ private struct MicrophoneSettingsTab: View {
     var body: some View {
         Form {
             Section(locale.t("settings.mic.section")) {
-                Picker(locale.t("settings.mic.picker"), selection: $appState.audioDeviceManager.selectedDevice) {
+                Picker(locale.t("settings.mic.picker"), selection: Binding(
+                    get: { appState.audioDeviceManager.selectedDevice },
+                    set: { appState.audioDeviceManager.selectedDevice = $0 }
+                )) {
                     ForEach(appState.audioDeviceManager.inputDevices) { device in
                         Text(device.name).tag(device)
                     }

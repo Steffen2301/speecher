@@ -8,7 +8,18 @@
       "Bash(git -C /Users/steffen/Dokumente/Claude/Speecher push)",
       "Bash(git -C /Users/steffen/Dokumente/Claude/Speecher add TODO.md)",
       "Bash(grep -oE '\"[^\"]{3,60}\"')",
-      "Bash(git -C /Users/steffen/Dokumente-Claude-Speecher status --short)"
+      "Bash(git -C /Users/steffen/Dokumente-Claude-Speecher status --short)",
+      "Bash(xcodebuild -scheme Speecher -destination platform=macOS -configuration Debug CODE_SIGNING_ALLOWED=NO build)",
+      "Bash(xcodegen generate *)",
+      "Bash(screencapture *)",
+      "Bash(// Get window ID via CGWindowListCopyWindowInfo)",
+      "Bash(python3 -)",
+      "Bash(osascript -e 'tell application \"System Events\" to get position of window 1 of process \"Speecher\"')",
+      "Bash(osascript -e 'tell application \"Speecher\" to get bounds of window 1')",
+      "Bash(osascript *)",
+      "Bash(pkill -x Speecher)",
+      "Bash(xcodebuild -scheme Speecher -destination 'platform=macOS' -configuration Debug CODE_SIGNING_ALLOWED=NO build)",
+      "Bash(open \"/Users/steffen/Library/Developer/Xcode/DerivedData/Speecher-gunuuyhcpjkneifzfmadvaqyqpds/Build/Products/Debug/Speecher.app\")"
     ]
   }
 }

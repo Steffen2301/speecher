@@ -9,7 +9,8 @@ public enum OutputResult: Sendable {
 }
 
 /// Abstraktion für die Textausgabe (Cursor-Inject oder Fallback-Textfeld).
-public protocol OutputService: Sendable {
+@MainActor
+public protocol OutputService: AnyObject {
     /// Vor Aufnahmestart aufrufen – speichert aktives Fenster und Cursor-Position.
     func saveFocus()
     /// Text an gespeicherter Position einfügen.
