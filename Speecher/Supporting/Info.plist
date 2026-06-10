@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>Speecher</string>
+    <key>CFBundleDisplayName</key>
+    <string>Speecher</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.steffen2301.speecher</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>CFBundleShortVersionString</key>
+    <string>0.1.0</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>14.0</string>
+    <key>NSPrincipalClass</key>
+    <string>NSApplication</string>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+
+    <!-- Mikrofon-Zugriff -->
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Speecher benötigt Zugriff auf das Mikrofon, um gesprochene Sprache aufzunehmen und in Text umzuwandeln.</string>
+
+    <!-- Audiodatei-Zugriff -->
+    <key>NSDocumentsFolderUsageDescription</key>
+    <string>Speecher benötigt Zugriff auf Audiodateien, die Sie importieren möchten.</string>
+
+    <!-- Accessibility für Cursor-Injection -->
+    <key>NSAccessibilityUsageDescription</key>
+    <string>Speecher benötigt Zugriff auf die Bedienungshilfen, um Text direkt an der Cursor-Position einzufügen.</string>
+
+    <!-- Unterstützte Dateiformate -->
+    <key>CFBundleDocumentTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>Audio File</string>
+            <key>CFBundleTypeRole</key>
+            <string>Viewer</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>public.mp3</string>
+                <string>public.mpeg-4-audio</string>
+                <string>com.apple.aiff-audio</string>
+                <string>public.audio</string>
+                <string>org.xiph.flac</string>
+                <string>org.xiph.ogg</string>
+            </array>
+        </dict>
+    </array>
+
+    <key>NSSupportsAutomaticTermination</key>
+    <false/>
+    <key>NSSupportsSuddenTermination</key>
+    <false/>
+</dict>
+</plist>

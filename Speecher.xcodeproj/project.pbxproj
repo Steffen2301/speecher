@@ -1,0 +1,508 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0C13DDE563F72F81B65C5204 /* TranscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 389BA7F04A8800F9A0972EE4 /* TranscriptionView.swift */; };
+		0FA15DF8143F311573306FCD /* SpeecherCore in Frameworks */ = {isa = PBXBuildFile; productRef = 86B4E988593615383086253B /* SpeecherCore */; };
+		137B4C16BEA5CF31282220D3 /* ToolbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30ECE2C49D38E7901BAE6E1F /* ToolbarView.swift */; };
+		2638CC949A2DA5D2811CBE1F /* AppCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49866D1005395B2D8970852 /* AppCommands.swift */; };
+		6BC1EAB16863A163B1F944E0 /* SpeecherApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BF470A745919EEEF0150A53 /* SpeecherApp.swift */; };
+		7A6D1543A389D874D87137F1 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98B9DE923FB6B3F4A1CE2B9D /* MenuBarView.swift */; };
+		818F7CFB79B0851BC9B0579A /* ControlBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2ABFCB4E5FCAB7DEC69F569 /* ControlBarView.swift */; };
+		A4DE5E19F65CC35A9F05E726 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DAD33CBAA62350C4DD3FF2 /* SettingsView.swift */; };
+		B873C25AF1687429F412204C /* SpeecherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39DDF74BD0C705392DBF59D8 /* SpeecherTests.swift */; };
+		C605810A52B567AD6B703637 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816ADC2F8F29E2E67599D051 /* ContentView.swift */; };
+		F47D028002F1914C8133761A /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BD1564256D11C59DB952E9 /* AppState.swift */; };
+		F71023B778D4D56FF907037F /* SpeecherCore in Frameworks */ = {isa = PBXBuildFile; productRef = 09415EEBC56D78239CBE313C /* SpeecherCore */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7C32A68B0C87CEB3F22D6CB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1871E6BB9CA793DBB4EF1B56 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FDE860CC7B99DEED949B0BD2;
+			remoteInfo = Speecher;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		03FAC2466329AC3C42AB88F1 /* SpeecherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpeecherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		17C7B61C9F2451DE84ADD341 /* Speecher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Speecher.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		30ECE2C49D38E7901BAE6E1F /* ToolbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarView.swift; sourceTree = "<group>"; };
+		389BA7F04A8800F9A0972EE4 /* TranscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranscriptionView.swift; sourceTree = "<group>"; };
+		39DDF74BD0C705392DBF59D8 /* SpeecherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeecherTests.swift; sourceTree = "<group>"; };
+		3BF470A745919EEEF0150A53 /* SpeecherApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeecherApp.swift; sourceTree = "<group>"; };
+		816ADC2F8F29E2E67599D051 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		88BD1564256D11C59DB952E9 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		98B9DE923FB6B3F4A1CE2B9D /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		9CFF4347B811A67333128807 /* SpeecherCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SpeecherCore; path = SpeecherCore; sourceTree = SOURCE_ROOT; };
+		D2ABFCB4E5FCAB7DEC69F569 /* ControlBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlBarView.swift; sourceTree = "<group>"; };
+		D8DAD33CBAA62350C4DD3FF2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		F49866D1005395B2D8970852 /* AppCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommands.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		96080AB6F1CBF4DE16C32133 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F71023B778D4D56FF907037F /* SpeecherCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EE49D4E622CFDD691B2DCF7C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0FA15DF8143F311573306FCD /* SpeecherCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1AD36D86F63EB9B326770A2C /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				1DD5BA00696CF03316DA5A5F /* App */,
+				3971EF5B20B704BCCA623680 /* ViewModels */,
+				74C9AAA563874F70A2E3F3BB /* Views */,
+			);
+			name = Sources;
+			path = Speecher/Sources;
+			sourceTree = "<group>";
+		};
+		1DD5BA00696CF03316DA5A5F /* App */ = {
+			isa = PBXGroup;
+			children = (
+				F49866D1005395B2D8970852 /* AppCommands.swift */,
+				88BD1564256D11C59DB952E9 /* AppState.swift */,
+				3BF470A745919EEEF0150A53 /* SpeecherApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		3971EF5B20B704BCCA623680 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		48F76F6ADEECCA5A5F765BF3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				17C7B61C9F2451DE84ADD341 /* Speecher.app */,
+				03FAC2466329AC3C42AB88F1 /* SpeecherTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5B0811F0EB11A2EAF4A1F8FE /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				9CFF4347B811A67333128807 /* SpeecherCore */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		694EB37551541D0A101C4DA5 /* SpeecherTests */ = {
+			isa = PBXGroup;
+			children = (
+				39DDF74BD0C705392DBF59D8 /* SpeecherTests.swift */,
+			);
+			path = SpeecherTests;
+			sourceTree = "<group>";
+		};
+		74C9AAA563874F70A2E3F3BB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				816ADC2F8F29E2E67599D051 /* ContentView.swift */,
+				D2ABFCB4E5FCAB7DEC69F569 /* ControlBarView.swift */,
+				98B9DE923FB6B3F4A1CE2B9D /* MenuBarView.swift */,
+				D8DAD33CBAA62350C4DD3FF2 /* SettingsView.swift */,
+				30ECE2C49D38E7901BAE6E1F /* ToolbarView.swift */,
+				389BA7F04A8800F9A0972EE4 /* TranscriptionView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A70C21F234CCB3F96E6234E1 = {
+			isa = PBXGroup;
+			children = (
+				5B0811F0EB11A2EAF4A1F8FE /* Packages */,
+				1AD36D86F63EB9B326770A2C /* Sources */,
+				694EB37551541D0A101C4DA5 /* SpeecherTests */,
+				48F76F6ADEECCA5A5F765BF3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		713EB91C7355AFECECDE32F3 /* SpeecherTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BAEF2CB7777D8E3C229A887B /* Build configuration list for PBXNativeTarget "SpeecherTests" */;
+			buildPhases = (
+				C1D940FC17D3B05B6BB22DAE /* Sources */,
+				EE49D4E622CFDD691B2DCF7C /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9B58035CE78B2A0FC75D63F9 /* PBXTargetDependency */,
+			);
+			name = SpeecherTests;
+			packageProductDependencies = (
+				86B4E988593615383086253B /* SpeecherCore */,
+			);
+			productName = SpeecherTests;
+			productReference = 03FAC2466329AC3C42AB88F1 /* SpeecherTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		FDE860CC7B99DEED949B0BD2 /* Speecher */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6BD1973F215A6905801F1332 /* Build configuration list for PBXNativeTarget "Speecher" */;
+			buildPhases = (
+				70912C517EC4F6A5A52BC38B /* Sources */,
+				96080AB6F1CBF4DE16C32133 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Speecher;
+			packageProductDependencies = (
+				09415EEBC56D78239CBE313C /* SpeecherCore */,
+			);
+			productName = Speecher;
+			productReference = 17C7B61C9F2451DE84ADD341 /* Speecher.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1871E6BB9CA793DBB4EF1B56 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					713EB91C7355AFECECDE32F3 = {
+						DevelopmentTeam = "";
+					};
+					FDE860CC7B99DEED949B0BD2 = {
+						DevelopmentTeam = "";
+					};
+				};
+			};
+			buildConfigurationList = 33B09DA2997D3F6EB266D0FA /* Build configuration list for PBXProject "Speecher" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = A70C21F234CCB3F96E6234E1;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				ABBB2D546EEE9DD2E4DDEB6A /* XCLocalSwiftPackageReference "SpeecherCore" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 48F76F6ADEECCA5A5F765BF3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FDE860CC7B99DEED949B0BD2 /* Speecher */,
+				713EB91C7355AFECECDE32F3 /* SpeecherTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		70912C517EC4F6A5A52BC38B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2638CC949A2DA5D2811CBE1F /* AppCommands.swift in Sources */,
+				F47D028002F1914C8133761A /* AppState.swift in Sources */,
+				C605810A52B567AD6B703637 /* ContentView.swift in Sources */,
+				818F7CFB79B0851BC9B0579A /* ControlBarView.swift in Sources */,
+				7A6D1543A389D874D87137F1 /* MenuBarView.swift in Sources */,
+				A4DE5E19F65CC35A9F05E726 /* SettingsView.swift in Sources */,
+				6BC1EAB16863A163B1F944E0 /* SpeecherApp.swift in Sources */,
+				137B4C16BEA5CF31282220D3 /* ToolbarView.swift in Sources */,
+				0C13DDE563F72F81B65C5204 /* TranscriptionView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C1D940FC17D3B05B6BB22DAE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B873C25AF1687429F412204C /* SpeecherTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9B58035CE78B2A0FC75D63F9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FDE860CC7B99DEED949B0BD2 /* Speecher */;
+			targetProxy = 7C32A68B0C87CEB3F22D6CB9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		3559808578B7951032B51FBB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.steffen2301.speecher.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Speecher.app/Contents/MacOS/Speecher";
+			};
+			name = Debug;
+		};
+		387981FC71E389846A177023 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Speecher/Supporting/Speecher.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Speecher/Supporting/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.steffen2301.speecher;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		790380A8A6EFA19FE5917F36 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.steffen2301.speecher.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Speecher.app/Contents/MacOS/Speecher";
+			};
+			name = Release;
+		};
+		8F0E42C880FB146BB7B11A0E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Speecher/Supporting/Speecher.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Speecher/Supporting/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.steffen2301.speecher;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		BAD942BECC67C7355DA719CA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		FB3D8FEC0611BFC17079D68A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		33B09DA2997D3F6EB266D0FA /* Build configuration list for PBXProject "Speecher" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FB3D8FEC0611BFC17079D68A /* Debug */,
+				BAD942BECC67C7355DA719CA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6BD1973F215A6905801F1332 /* Build configuration list for PBXNativeTarget "Speecher" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				387981FC71E389846A177023 /* Debug */,
+				8F0E42C880FB146BB7B11A0E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		BAEF2CB7777D8E3C229A887B /* Build configuration list for PBXNativeTarget "SpeecherTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3559808578B7951032B51FBB /* Debug */,
+				790380A8A6EFA19FE5917F36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		ABBB2D546EEE9DD2E4DDEB6A /* XCLocalSwiftPackageReference "SpeecherCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = SpeecherCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		09415EEBC56D78239CBE313C /* SpeecherCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SpeecherCore;
+		};
+		86B4E988593615383086253B /* SpeecherCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SpeecherCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 1871E6BB9CA793DBB4EF1B56 /* Project object */;
+}
