@@ -77,12 +77,15 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · `[!]` blockiert
 - [ ] Streaming-Antwort (Wort-für-Wort) – Phase 2
 
 ### 1.6 OutputService (Textausgabe)
-- [ ] `OutputService` implementieren
-- [ ] Cursor-Position beim Start der Aufnahme merken (aktives Fenster)
-- [ ] Text via macOS Accessibility API (`AXUIElement`) einfügen
-- [ ] Accessibility-Berechtigung anfragen und prüfen
-- [ ] Fallback-Textfeld: Text anzeigen wenn Injection nicht möglich
-- [ ] Fallback: „Kopieren"-Button im Textfeld
+- [x] `OutputService`-Protokoll + `OutputResult`-Enum
+- [x] `AccessibilityOutputService`: saveFocus() vor Aufnahmestart
+- [x] Strategie 1: AXUIElement kAXSelectedTextAttribute (direkte Injection)
+- [x] Strategie 2: CGEvent Cmd+V an gespeicherte PID (postToPid)
+- [x] Strategie 3: Clipboard-Fallback mit Statusanzeige
+- [x] `AccessibilityPermission`: AXIsProcessTrusted + Systemeinstellungen-Link
+- [x] `OnboardingView`: Berechtigung erklären, prüfen, verlinken
+- [x] `OutputResultBadge` in ControlBar (grün/orange je nach Methode)
+- [x] Fallback-Textfeld immer als Protokoll sichtbar
 
 ### 1.7 Benutzeroberfläche (SwiftUI)
 - [x] `MainView`: Start/Stop-Button, Sprach-Auswahl, Live-Vorschau
