@@ -1,6 +1,6 @@
 # Speecher – Todo-Liste
 
-**Letzte Aktualisierung:** 2026-06-10  
+**Letzte Aktualisierung:** 2026-06-10 (Xcode-Projekt erstellt)  
 Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · `[!]` blockiert
 
 ---
@@ -30,10 +30,10 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · `[!]` blockiert
 ## Phase 1 – macOS MVP
 
 ### 1.1 Xcode-Projekt
-- [ ] Xcode-Projekt `Speecher` anlegen (SwiftUI, macOS 14+)
-- [ ] SpeecherCore als lokale Package-Abhängigkeit einbinden
-- [ ] App-Icon und Basis-Assets anlegen
-- [ ] SwiftLint-Konfiguration (`.swiftlint.yml`) erstellen
+- [x] Xcode-Projekt `Speecher` anlegen (SwiftUI, macOS 14+)
+- [x] SpeecherCore als lokale Package-Abhängigkeit einbinden
+- [x] App-Icon und Basis-Assets anlegen
+- [x] SwiftLint-Konfiguration (`.swiftlint.yml`) erstellen
 - [ ] Xcode-Projekt in CI/CD-Workflow aktivieren
 
 ### 1.2 Einstellungen & Datenmodell (`SettingsStore`)
@@ -81,12 +81,12 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · `[!]` blockiert
 - [ ] Fallback: „Kopieren"-Button im Textfeld
 
 ### 1.7 Benutzeroberfläche (SwiftUI)
-- [ ] `MainView`: Start/Stop-Button, Sprach-Auswahl, Live-Vorschau
-- [ ] `SettingsView`: Mikrofon, Modelle, API-Keys, UI-Sprache
+- [x] `MainView`: Start/Stop-Button, Sprach-Auswahl, Live-Vorschau
+- [x] `SettingsView`: Mikrofon, Modelle, API-Keys, UI-Sprache
 - [ ] `FileImportView`: Audiodatei-Import mit Fortschrittsanzeige
-- [ ] `OutputView`: Fallback-Textfeld mit Kopieren-Button
-- [ ] Statusleisten-App (Menu Bar) mit Start/Stop-Icon
-- [ ] Globaler Tastatur-Shortcut (z. B. `⌘ + Shift + M`)
+- [x] `OutputView`: Fallback-Textfeld mit Kopieren-Button
+- [x] Statusleisten-App (Menu Bar) mit Start/Stop-Icon
+- [x] Globaler Tastatur-Shortcut (`⌘⇧M`)
 - [ ] Onboarding: Accessibility-Berechtigung erklären + anfragen
 
 ### 1.8 Mehrsprachige UI (Lokalisierung)
