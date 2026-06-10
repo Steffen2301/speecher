@@ -9,16 +9,23 @@ final class AppState: ObservableObject {
     @Published var errorMessage: String?
     @Published var isProcessing = false
 
-    @AppStorage("inputLanguage")   var inputLanguage   = "de"
-    @AppStorage("outputLanguage")  var outputLanguage  = "de"
-    @AppStorage("uiLanguage")      var uiLanguage      = "de"
-    @AppStorage("asrMode")         var asrMode         = ASRMode.whisperKit
-    @AppStorage("whisperModel")    var whisperModelRaw = WhisperKitService.WhisperModel.base.rawValue
-    @AppStorage("correctionMode")  var correctionMode  = CorrectionMode.cloud
+    @AppStorage("inputLanguage")        var inputLanguage        = "de"
+    @AppStorage("outputLanguage")       var outputLanguage       = "de"
+    @AppStorage("uiLanguage")           var uiLanguage           = "de"
+    @AppStorage("asrMode")              var asrMode              = ASRMode.whisperKit
+    @AppStorage("whisperModel")         var whisperModelRaw      = WhisperKitService.WhisperModel.base.rawValue
+    @AppStorage("correctionMode")       var correctionModeRaw    = CorrectionServiceFactory.Mode.appleBuiltin.rawValue
+    @AppStorage("ollamaModel")          var ollamaModel          = "llama3.2"
+    @AppStorage("ollamaHost")           var ollamaHost           = "http://localhost:11434"
 
     var whisperModel: WhisperKitService.WhisperModel {
-        get { WhisperKitService.WhisperModel(rawValue: whisperModelRaw) ?? .base }
+        get { .init(rawValue: whisperModelRaw) ?? .base }
         set { whisperModelRaw = newValue.rawValue }
+    }
+
+    var correctionMode: CorrectionServiceFactory.Mode {
+        get { .init(rawValue: correctionModeRaw) ?? .appleBuiltin }
+        set { correctionModeRaw = newValue.rawValue }
     }
 
     let audioRecorder        = AudioRecorder(chunkDuration: 5.0)
@@ -31,11 +38,6 @@ final class AppState: ObservableObject {
         case appleSpeech = "appleSpeech"
     }
 
-    enum CorrectionMode: String, CaseIterable {
-        case cloud = "cloud"
-        case local = "local"
-    }
-
     // MARK: - Recording
 
     func toggleRecording() {
@@ -45,11 +47,14 @@ final class AppState: ObservableObject {
     private func startRecording() async {
         guard await ensureMicrophonePermission() else { return }
 
-        statusMessage = asrMode == .whisperKit ? "Lade Modell …" : "Aufnahme startet …"
-        let service = makeASRService()
+        statusMessage = "Lade Modell …"
+        let asrService         = makeASRService()
+        let correctionService  = makeCorrectionService()
 
         audioRecorder.onChunk = { [weak self] chunk in
-            Task { [weak self] in await self?.handleChunk(chunk, service: service) }
+            Task { [weak self] in
+                await self?.handleChunk(chunk, asr: asrService, correction: correctionService)
+            }
         }
 
         do {
@@ -69,17 +74,27 @@ final class AppState: ObservableObject {
         statusMessage = ""
     }
 
-    // MARK: - ASR
+    // MARK: - Pipeline: Chunk → ASR → Korrektur → Text
 
-    private func handleChunk(_ chunk: AudioChunk, service: any ASRService) async {
+    private func handleChunk(
+        _ chunk: AudioChunk,
+        asr: any ASRService,
+        correction: any CorrectionService
+    ) async {
         isProcessing = true
         do {
-            let result = try await service.transcribe(chunk, language: inputLanguage)
-            if !result.isEmpty {
-                if !transcribedText.isEmpty { transcribedText += " " }
-                transcribedText += result.text
-                statusMessage = "Segment \(result.sequenceNumber + 1) transkribiert"
-            }
+            let asrResult = try await asr.transcribe(chunk, language: inputLanguage)
+            guard !asrResult.isEmpty else { isProcessing = false; return }
+
+            let corrResult = try await correction.correct(
+                asrResult.text,
+                sourceLang: inputLanguage,
+                targetLang: outputLanguage
+            )
+
+            if !transcribedText.isEmpty { transcribedText += " " }
+            transcribedText += corrResult.correctedText
+            statusMessage = corrResult.backend
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -89,20 +104,23 @@ final class AppState: ObservableObject {
     func transcribeFile(url: URL) {
         Task {
             isProcessing = true
-            statusMessage = asrMode == .whisperKit ? "Lade Modell …" : "Verarbeite …"
-            let service = makeASRService()
-            var chunkCount = 0
+            statusMessage = "Lade Modell …"
+            let asrService        = makeASRService()
+            let correctionService = makeCorrectionService()
+            var count = 0
             do {
                 for try await chunk in audioFileProcessor.chunks(from: url) {
-                    let result = try await service.transcribe(chunk, language: inputLanguage)
-                    if !result.isEmpty {
-                        if !transcribedText.isEmpty { transcribedText += " " }
-                        transcribedText += result.text
-                    }
-                    chunkCount += 1
-                    statusMessage = "Segment \(chunkCount) verarbeitet …"
+                    let asr = try await asrService.transcribe(chunk, language: inputLanguage)
+                    if asr.isEmpty { continue }
+                    let corr = try await correctionService.correct(
+                        asr.text, sourceLang: inputLanguage, targetLang: outputLanguage
+                    )
+                    if !transcribedText.isEmpty { transcribedText += " " }
+                    transcribedText += corr.correctedText
+                    count += 1
+                    statusMessage = "Segment \(count) – \(corr.backend)"
                 }
-                statusMessage = "\(chunkCount) Segment(e) aus \(url.lastPathComponent) fertig."
+                statusMessage = "\(count) Segment(e) fertig."
             } catch {
                 errorMessage = error.localizedDescription
                 statusMessage = ""
@@ -111,9 +129,9 @@ final class AppState: ObservableObject {
         }
     }
 
-    // MARK: - Helper
+    // MARK: - Factory
 
-    private func makeASRService() -> any ASRService {
+    func makeASRService() -> any ASRService {
         switch asrMode {
         case .whisperKit:
             return ASRServiceFactory.make(mode: .whisperKit(model: whisperModel))
@@ -121,6 +139,19 @@ final class AppState: ObservableObject {
             return ASRServiceFactory.make(mode: .appleSpeech)
         }
     }
+
+    func makeCorrectionService() -> any CorrectionService {
+        let ollamaURL = URL(string: ollamaHost) ?? OllamaService.defaultHost
+        return CorrectionServiceFactory.make(
+            mode: correctionMode,
+            ollamaModel: ollamaModel,
+            ollamaHost: ollamaURL,
+            claudeKey: (try? KeychainManager.load(for: .anthropic)) ?? "",
+            openAIKey: (try? KeychainManager.load(for: .openAI)) ?? ""
+        )
+    }
+
+    // MARK: - Permission
 
     private func ensureMicrophonePermission() async -> Bool {
         switch MicrophonePermission.current {

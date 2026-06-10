@@ -3,7 +3,10 @@
     "allow": [
       "Bash(swift build *)",
       "Bash(git -C /Users/steffen/Dokumente/Claude/Speecher add -A)",
-      "Bash(git -C /Users/steffen/Dokumente/Claude/Speecher status --short)"
+      "Bash(git -C /Users/steffen/Dokumente/Claude/Speecher status --short)",
+      "Bash(git -C /Users/steffen/Dokumente/Claude/Speecher commit -m ' *)",
+      "Bash(git -C /Users/steffen/Dokumente/Claude/Speecher push)",
+      "Bash(git -C /Users/steffen/Dokumente/Claude/Speecher add TODO.md)"
     ]
   }
 }
