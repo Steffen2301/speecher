@@ -1,6 +1,6 @@
 # Speecher – Todo-Liste
 
-**Letzte Aktualisierung:** 2026-06-10 (Xcode-Projekt erstellt)  
+**Letzte Aktualisierung:** 2026-06-10 (AudioEngine fertig)  
 Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · `[!]` blockiert
 
 ---
@@ -47,13 +47,13 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · `[!]` blockiert
 - [ ] API-Keys sicher im macOS Keychain speichern
 
 ### 1.3 AudioEngine
-- [ ] Mikrofon-Gerät auflisten und auswählen
-- [ ] Live-Aufnahme starten / stoppen (AVFoundation)
-- [ ] Audio in 5-Sekunden-Chunks für Streaming-ASR aufteilen
-- [ ] Audiodatei-Import: Datei-Öffnen-Dialog (Drag & Drop)
-- [ ] Unterstützte Formate: MP3, WAV, M4A, FLAC, OGG, AIFF, OPUS, MP4
-- [ ] Audiodateien in 30-Sekunden-Segmente für Batch-ASR aufteilen
-- [ ] Aufnahme-Pegel-Anzeige (VU-Meter) im UI
+- [x] Mikrofon-Gerät auflisten und auswählen (CoreAudio)
+- [x] Live-Aufnahme starten / stoppen (AVAudioEngine)
+- [x] Audio in 5-Sekunden-Chunks für Streaming-ASR aufteilen
+- [x] Audiodatei-Import: Datei-Öffnen-Dialog
+- [x] Unterstützte Formate: MP3, WAV, M4A, FLAC, AIFF, CAF, MP4 (OGG/OPUS Phase 2)
+- [x] Audiodateien in 30-Sekunden-Segmente für Batch-ASR aufteilen
+- [x] Aufnahme-Pegel-Anzeige (VU-Meter) im UI
 
 ### 1.4 ASR-Service (Spracherkennung)
 - [ ] `ASRService`-Protokoll definieren
