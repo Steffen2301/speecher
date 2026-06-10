@@ -57,9 +57,9 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · `[!]` blockiert
 
 ### 1.4 ASR-Service (Spracherkennung)
 - [x] `ASRService`-Protokoll definieren + Factory
-- [x] Cloud-Implementierung: Whisper API (OpenAI)
-- [x] Lokal-Implementierung: Apple SFSpeechRecognizer (on-device, Phase 1)
-- [x] Whisper.cpp: Modell-Download-Manager mit Fortschrittsanzeige (Phase 2 ready)
+- [x] Lokal-Implementierung: WhisperKit (Core ML, on-device, kein API-Key)
+- [x] Lokal-Fallback: Apple SFSpeechRecognizer (leichtgewichtig)
+- [x] Modell-Download-Manager (tiny / base / small / medium / large-v3 / turbo)
 - [x] Batch-Modus: Audiodatei-Verarbeitung (AsyncThrowingStream)
 - [x] Fehlerbehandlung: Netzwerk, Permission, API-Key, Decoding
 - [x] KeychainManager: sichere API-Key-Speicherung
