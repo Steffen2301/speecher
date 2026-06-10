@@ -42,7 +42,10 @@
       "Bash(open /Applications/Ollama.app)",
       "Bash(gh run *)",
       "Bash(awk -F'\\\\t' '{print $3}')",
-      "Bash(swiftlint lint *)"
+      "Bash(swiftlint lint *)",
+      "Bash(defaults read *)",
+      "Bash(git -C /Users/steffen/Dokumente/Claude/Speecher add .claude/settings.local.json)",
+      "Bash(git -C /Users/steffen/Dokumente/Claude/Speecher commit -m 'Build and test successful: 42 tests, 0 build errors, App works end-to-end *)"
     ]
   }
 }
