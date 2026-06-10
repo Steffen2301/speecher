@@ -6,42 +6,40 @@ import Foundation
 
 final class PCMToWAVTests: XCTestCase {
     func testWAVHeaderSize() {
-        let pcm = Data(repeating: 0, count: 3200)   // 100ms bei 16kHz Float32
+        let pcm = Data(repeating: 0, count: 3200)
         let wav = PCMToWAV.convert(pcmData: pcm)
-        XCTAssertGreaterThan(wav.count, 44)          // mindestens WAV-Header
+        XCTAssertGreaterThan(wav.count, 44)
     }
 
     func testWAVStartsWithRIFF() {
         let wav = PCMToWAV.convert(pcmData: Data(repeating: 0, count: 64))
-        let header = String(bytes: wav.prefix(4), encoding: .ascii)
-        XCTAssertEqual(header, "RIFF")
+        XCTAssertEqual(String(bytes: wav.prefix(4), encoding: .ascii), "RIFF")
     }
 
     func testWAVContainsWAVEMarker() {
         let wav = PCMToWAV.convert(pcmData: Data(repeating: 0, count: 64))
-        let marker = String(bytes: wav[8..<12], encoding: .ascii)
-        XCTAssertEqual(marker, "WAVE")
+        XCTAssertEqual(String(bytes: wav[8..<12], encoding: .ascii), "WAVE")
     }
 
-    func testEmptyPCMProducesValidHeader() {
+    func testEmptyPCMProducesHeaderOnly() {
         let wav = PCMToWAV.convert(pcmData: Data())
-        XCTAssertEqual(wav.count, 44)   // Nur Header, keine Samples
+        XCTAssertEqual(wav.count, 44)
     }
 }
 
 // MARK: - ASRResult
 
 final class ASRResultTests: XCTestCase {
-    func testEmptyTextIsEmpty() {
-        let result = ASRResult(text: "   ", detectedLanguage: nil,
-                               audioDuration: 5, sequenceNumber: 0, isFinal: true)
-        XCTAssertTrue(result.isEmpty)
+    func testWhitespaceOnlyIsEmpty() {
+        let r = ASRResult(text: "   ", detectedLanguage: nil,
+                          audioDuration: 5, sequenceNumber: 0, isFinal: true)
+        XCTAssertTrue(r.isEmpty)
     }
 
     func testNonEmptyText() {
-        let result = ASRResult(text: "Hallo Welt", detectedLanguage: "de",
-                               audioDuration: 5, sequenceNumber: 0, isFinal: true)
-        XCTAssertFalse(result.isEmpty)
+        let r = ASRResult(text: "Hallo Welt", detectedLanguage: "de",
+                          audioDuration: 5, sequenceNumber: 0, isFinal: true)
+        XCTAssertFalse(r.isEmpty)
     }
 }
 
@@ -50,55 +48,45 @@ final class ASRResultTests: XCTestCase {
 final class ASRErrorTests: XCTestCase {
     func testAllErrorsHaveDescriptions() {
         let errors: [ASRError] = [
-            .apiKeyMissing,
+            .modelNotLoaded("openai_whisper-base"),
             .networkError(URLError(.notConnectedToInternet)),
-            .invalidResponse(429),
-            .decodingFailed("bad json"),
+            .inferenceError("timeout"),
             .permissionDenied,
             .serviceUnavailable,
             .audioConversionFailed,
         ]
-        for error in errors {
-            XCTAssertFalse(error.errorDescription?.isEmpty ?? true, "Missing description for \(error)")
+        for e in errors {
+            XCTAssertFalse(e.errorDescription?.isEmpty ?? true, "Missing description for \(e)")
         }
     }
 }
 
-// MARK: - KeychainManager
+// MARK: - WhisperModel
 
-final class KeychainManagerTests: XCTestCase {
-    private let testKey = KeychainManager.Key.openAI
-
-    override func tearDown() {
-        KeychainManager.delete(for: testKey)
+final class WhisperModelTests: XCTestCase {
+    func testAllModelsHaveIdentifiers() {
+        for model in WhisperKitService.WhisperModel.allCases {
+            XCTAssertTrue(model.identifier.hasPrefix("openai_whisper-"))
+        }
     }
 
-    func testSaveAndLoad() throws {
-        try KeychainManager.save("test-key-12345", for: testKey)
-        let loaded = try KeychainManager.load(for: testKey)
-        XCTAssertEqual(loaded, "test-key-12345")
+    func testAllModelsHavePositiveSize() {
+        for model in WhisperKitService.WhisperModel.allCases {
+            XCTAssertGreaterThan(model.approximateSizeMB, 0)
+        }
     }
 
-    func testLoadMissingKeyReturnsNil() throws {
-        KeychainManager.delete(for: testKey)
-        let loaded = try KeychainManager.load(for: testKey)
-        XCTAssertNil(loaded)
-    }
-
-    func testDeleteRemovesKey() throws {
-        try KeychainManager.save("temp", for: testKey)
-        KeychainManager.delete(for: testKey)
-        let loaded = try KeychainManager.load(for: testKey)
-        XCTAssertNil(loaded)
+    func testBaseModelIdentifier() {
+        XCTAssertEqual(WhisperKitService.WhisperModel.base.identifier, "openai_whisper-base")
     }
 }
 
 // MARK: - ASRServiceFactory
 
 final class ASRServiceFactoryTests: XCTestCase {
-    func testWhisperAPIServiceIsCreated() {
-        let service = ASRServiceFactory.make(mode: .whisperAPI(apiKey: "key"))
-        XCTAssertTrue(service is WhisperAPIService)
+    func testWhisperKitServiceIsCreated() {
+        let service = ASRServiceFactory.make(mode: .whisperKit(model: .base))
+        XCTAssertTrue(service is WhisperKitService)
     }
 
     func testAppleSpeechServiceIsCreated() {
@@ -107,20 +95,24 @@ final class ASRServiceFactoryTests: XCTestCase {
     }
 }
 
-// MARK: - WhisperAPIService (ohne Netzwerk)
+// MARK: - KeychainManager
 
-final class WhisperAPIServiceTests: XCTestCase {
-    func testMissingKeyThrows() async {
-        let service = WhisperAPIService(apiKey: "")
-        let chunk = AudioChunk(data: Data(repeating: 0, count: 64), sampleRate: 16000,
-                               channelCount: 1, sequenceNumber: 0, timestamp: Date(), duration: 0.002)
-        do {
-            _ = try await service.transcribe(chunk, language: "de")
-            XCTFail("Sollte ASRError.apiKeyMissing werfen")
-        } catch ASRError.apiKeyMissing {
-            // erwartet
-        } catch {
-            XCTFail("Unerwarteter Fehler: \(error)")
-        }
+final class KeychainManagerTests: XCTestCase {
+    override func tearDown() { KeychainManager.delete(for: .anthropic) }
+
+    func testSaveAndLoad() throws {
+        try KeychainManager.save("test-key-99", for: .anthropic)
+        XCTAssertEqual(try KeychainManager.load(for: .anthropic), "test-key-99")
+    }
+
+    func testMissingKeyReturnsNil() throws {
+        KeychainManager.delete(for: .anthropic)
+        XCTAssertNil(try KeychainManager.load(for: .anthropic))
+    }
+
+    func testDeleteRemovesKey() throws {
+        try KeychainManager.save("temp", for: .anthropic)
+        KeychainManager.delete(for: .anthropic)
+        XCTAssertNil(try KeychainManager.load(for: .anthropic))
     }
 }

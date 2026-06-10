@@ -1,24 +1,21 @@
 import Foundation
 
 public enum ASRError: LocalizedError {
-    case apiKeyMissing
+    case modelNotLoaded(String)
     case networkError(Error)
-    case invalidResponse(Int)
-    case decodingFailed(String)
+    case inferenceError(String)
     case permissionDenied
     case serviceUnavailable
     case audioConversionFailed
 
     public var errorDescription: String? {
         switch self {
-        case .apiKeyMissing:
-            return "Kein API-Key hinterlegt. Bitte in den Einstellungen → Modelle eintragen."
+        case .modelNotLoaded(let name):
+            return "Modell '\(name)' konnte nicht geladen werden. Bitte in den Einstellungen herunterladen."
         case .networkError(let error):
-            return "Netzwerkfehler: \(error.localizedDescription)"
-        case .invalidResponse(let code):
-            return "Ungültige API-Antwort (HTTP \(code))."
-        case .decodingFailed(let detail):
-            return "Antwort konnte nicht gelesen werden: \(detail)"
+            return "Netzwerkfehler beim Modell-Download: \(error.localizedDescription)"
+        case .inferenceError(let detail):
+            return "Transkription fehlgeschlagen: \(detail)"
         case .permissionDenied:
             return "Spracherkennungs-Berechtigung verweigert."
         case .serviceUnavailable:

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(swift build *)",
+      "Bash(git -C /Users/steffen/Dokumente/Claude/Speecher add -A)",
+      "Bash(git -C /Users/steffen/Dokumente/Claude/Speecher status --short)"
+    ]
+  }
+}

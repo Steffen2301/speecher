@@ -8,14 +8,12 @@ struct SettingsView: View {
         TabView {
             GeneralSettingsTab()
                 .tabItem { Label("Allgemein", systemImage: "gear") }
-
             ModelsSettingsTab()
                 .tabItem { Label("Modelle", systemImage: "cpu") }
-
             MicrophoneSettingsTab()
                 .tabItem { Label("Mikrofon", systemImage: "mic") }
         }
-        .frame(width: 520, height: 380)
+        .frame(width: 540, height: 420)
         .environmentObject(appState)
     }
 }
@@ -24,7 +22,6 @@ struct SettingsView: View {
 
 private struct GeneralSettingsTab: View {
     @EnvironmentObject private var appState: AppState
-
     private let uiLanguages = [("de", "Deutsch"), ("en", "English")]
 
     var body: some View {
@@ -43,32 +40,43 @@ private struct GeneralSettingsTab: View {
 
 private struct ModelsSettingsTab: View {
     @EnvironmentObject private var appState: AppState
-
-    @State private var openAIKey = ""
     @State private var anthropicKey = ""
     @State private var keySaveError: String?
 
     var body: some View {
         Form {
+            // ASR
             Section("Spracherkennung (ASR)") {
-                Picker("Modus", selection: $appState.asrMode) {
-                    Text("Apple Speech (lokal, kostenlos)").tag(AppState.ASRMode.appleSpeech)
-                    Text("Whisper API (OpenAI, Cloud)").tag(AppState.ASRMode.whisperAPI)
+                Picker("Backend", selection: $appState.asrMode) {
+                    Text("WhisperKit (lokal, on-device)").tag(AppState.ASRMode.whisperKit)
+                    Text("Apple Speech (leichtgewichtig)").tag(AppState.ASRMode.appleSpeech)
                 }
                 .pickerStyle(.radioGroup)
             }
 
-            if appState.asrMode == .whisperAPI {
-                Section("OpenAI API-Key") {
-                    SecureField("sk-…", text: $openAIKey)
-                    Button("Speichern") { saveKey(.openAI, value: openAIKey) }
-                        .buttonStyle(.borderedProminent)
-                        .controlSize(.small)
+            if appState.asrMode == .whisperKit {
+                Section("Whisper-Modell") {
+                    Picker("Modell", selection: $appState.whisperModel) {
+                        ForEach(WhisperKitService.WhisperModel.allCases, id: \.self) { model in
+                            Text(model.displayName).tag(model)
+                        }
+                    }
+
+                    HStack {
+                        Spacer()
+                        ModelActionButton(model: appState.whisperModel)
+                            .environmentObject(appState.modelDownloadManager)
+                    }
+
+                    Text("Modelle werden einmalig heruntergeladen und lokal gespeichert. Danach kein Internet erforderlich.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
             }
 
+            // Korrektur & Übersetzung
             Section("Korrektur & Übersetzung") {
-                Picker("Modus", selection: $appState.correctionMode) {
+                Picker("Backend", selection: $appState.correctionMode) {
                     Text("Cloud (Claude API)").tag(AppState.CorrectionMode.cloud)
                     Text("Lokal (Ollama) – Phase 2").tag(AppState.CorrectionMode.local)
                 }
@@ -78,38 +86,25 @@ private struct ModelsSettingsTab: View {
             if appState.correctionMode == .cloud {
                 Section("Anthropic API-Key") {
                     SecureField("sk-ant-…", text: $anthropicKey)
-                    Button("Speichern") { saveKey(.anthropic, value: anthropicKey) }
+                    Button("Speichern") { saveAnthropicKey() }
                         .buttonStyle(.borderedProminent)
                         .controlSize(.small)
-                }
-            }
-
-            if let error = keySaveError {
-                Text(error).foregroundStyle(.red).font(.caption)
-            }
-
-            Section("Lokale Whisper-Modelle (Phase 2)") {
-                ForEach(ModelDownloadManager.WhisperModel.allCases, id: \.self) { model in
-                    ModelRowView(model: model)
-                        .environmentObject(appState.modelDownloadManager)
+                    if let error = keySaveError {
+                        Text(error).foregroundStyle(.red).font(.caption)
+                    }
                 }
             }
         }
         .padding(20)
-        .onAppear { loadKeys() }
+        .onAppear { anthropicKey = (try? KeychainManager.load(for: .anthropic)) ?? "" }
     }
 
-    private func loadKeys() {
-        openAIKey    = (try? KeychainManager.load(for: .openAI))    ?? ""
-        anthropicKey = (try? KeychainManager.load(for: .anthropic)) ?? ""
-    }
-
-    private func saveKey(_ key: KeychainManager.Key, value: String) {
+    private func saveAnthropicKey() {
         do {
-            if value.isEmpty {
-                KeychainManager.delete(for: key)
+            if anthropicKey.isEmpty {
+                KeychainManager.delete(for: .anthropic)
             } else {
-                try KeychainManager.save(value, for: key)
+                try KeychainManager.save(anthropicKey, for: .anthropic)
             }
             keySaveError = nil
         } catch {
@@ -118,37 +113,39 @@ private struct ModelsSettingsTab: View {
     }
 }
 
-private struct ModelRowView: View {
-    let model: ModelDownloadManager.WhisperModel
+private struct ModelActionButton: View {
+    let model: WhisperKitService.WhisperModel
     @EnvironmentObject private var manager: ModelDownloadManager
 
     var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                Text(model.displayName).font(.body)
-            }
-            Spacer()
-            stateView
-        }
-    }
-
-    @ViewBuilder
-    private var stateView: some View {
         switch manager.states[model] ?? .notDownloaded {
         case .notDownloaded:
-            Button("Laden") { manager.download(model) }
-                .buttonStyle(.bordered).controlSize(.small)
-        case .downloading(let progress):
-            ProgressView(value: progress)
-                .frame(width: 80)
+            Button("Herunterladen (\(model.approximateSizeMB) MB)") {
+                manager.download(model)
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.small)
+
+        case .downloading:
+            HStack(spacing: 8) {
+                ProgressView().controlSize(.small)
+                Text("Wird geladen …").font(.caption).foregroundStyle(.secondary)
+            }
+
         case .downloaded:
-            HStack(spacing: 4) {
+            HStack(spacing: 6) {
                 Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+                Text("Bereit").font(.caption)
                 Button("Löschen") { manager.delete(model) }
                     .buttonStyle(.bordered).controlSize(.small)
             }
+
         case .failed(let msg):
-            Text(msg).font(.caption).foregroundStyle(.red)
+            VStack(alignment: .trailing, spacing: 4) {
+                Text(msg).font(.caption).foregroundStyle(.red)
+                Button("Erneut versuchen") { manager.download(model) }
+                    .buttonStyle(.bordered).controlSize(.small)
+            }
         }
     }
 }

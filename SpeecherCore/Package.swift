@@ -10,9 +10,18 @@ let package = Package(
     products: [
         .library(name: "SpeecherCore", targets: ["SpeecherCore"])
     ],
+    dependencies: [
+        .package(
+            url: "https://github.com/argmaxinc/WhisperKit",
+            from: "0.9.0"
+        )
+    ],
     targets: [
         .target(
             name: "SpeecherCore",
+            dependencies: [
+                .product(name: "WhisperKit", package: "WhisperKit")
+            ],
             path: "Sources/SpeecherCore"
         ),
         .testTarget(

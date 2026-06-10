@@ -9,19 +9,25 @@ final class AppState: ObservableObject {
     @Published var errorMessage: String?
     @Published var isProcessing = false
 
-    @AppStorage("inputLanguage") var inputLanguage = "de"
-    @AppStorage("outputLanguage") var outputLanguage = "de"
-    @AppStorage("uiLanguage") var uiLanguage = "de"
-    @AppStorage("asrMode") var asrMode = ASRMode.appleSpeech
-    @AppStorage("correctionMode") var correctionMode = CorrectionMode.cloud
+    @AppStorage("inputLanguage")   var inputLanguage   = "de"
+    @AppStorage("outputLanguage")  var outputLanguage  = "de"
+    @AppStorage("uiLanguage")      var uiLanguage      = "de"
+    @AppStorage("asrMode")         var asrMode         = ASRMode.whisperKit
+    @AppStorage("whisperModel")    var whisperModelRaw = WhisperKitService.WhisperModel.base.rawValue
+    @AppStorage("correctionMode")  var correctionMode  = CorrectionMode.cloud
 
-    let audioRecorder = AudioRecorder(chunkDuration: 5.0)
-    let audioDeviceManager = AudioDeviceManager()
-    let audioFileProcessor = AudioFileProcessor()
+    var whisperModel: WhisperKitService.WhisperModel {
+        get { WhisperKitService.WhisperModel(rawValue: whisperModelRaw) ?? .base }
+        set { whisperModelRaw = newValue.rawValue }
+    }
+
+    let audioRecorder        = AudioRecorder(chunkDuration: 5.0)
+    let audioDeviceManager   = AudioDeviceManager()
+    let audioFileProcessor   = AudioFileProcessor()
     let modelDownloadManager = ModelDownloadManager()
 
     enum ASRMode: String, CaseIterable {
-        case whisperAPI  = "whisperAPI"
+        case whisperKit  = "whisperKit"
         case appleSpeech = "appleSpeech"
     }
 
@@ -39,11 +45,11 @@ final class AppState: ObservableObject {
     private func startRecording() async {
         guard await ensureMicrophonePermission() else { return }
 
+        statusMessage = asrMode == .whisperKit ? "Lade Modell …" : "Aufnahme startet …"
         let service = makeASRService()
+
         audioRecorder.onChunk = { [weak self] chunk in
-            Task { [weak self] in
-                await self?.handleChunk(chunk, service: service)
-            }
+            Task { [weak self] in await self?.handleChunk(chunk, service: service) }
         }
 
         do {
@@ -53,6 +59,7 @@ final class AppState: ObservableObject {
             statusMessage = "Aufnahme läuft …"
         } catch {
             errorMessage = error.localizedDescription
+            statusMessage = ""
         }
     }
 
@@ -71,7 +78,7 @@ final class AppState: ObservableObject {
             if !result.isEmpty {
                 if !transcribedText.isEmpty { transcribedText += " " }
                 transcribedText += result.text
-                statusMessage = "Chunk \(result.sequenceNumber + 1) transkribiert"
+                statusMessage = "Segment \(result.sequenceNumber + 1) transkribiert"
             }
         } catch {
             errorMessage = error.localizedDescription
@@ -82,7 +89,7 @@ final class AppState: ObservableObject {
     func transcribeFile(url: URL) {
         Task {
             isProcessing = true
-            statusMessage = "Verarbeite \(url.lastPathComponent) …"
+            statusMessage = asrMode == .whisperKit ? "Lade Modell …" : "Verarbeite …"
             let service = makeASRService()
             var chunkCount = 0
             do {
@@ -108,9 +115,8 @@ final class AppState: ObservableObject {
 
     private func makeASRService() -> any ASRService {
         switch asrMode {
-        case .whisperAPI:
-            let key = (try? KeychainManager.load(for: .openAI)) ?? ""
-            return ASRServiceFactory.make(mode: .whisperAPI(apiKey: key))
+        case .whisperKit:
+            return ASRServiceFactory.make(mode: .whisperKit(model: whisperModel))
         case .appleSpeech:
             return ASRServiceFactory.make(mode: .appleSpeech)
         }
