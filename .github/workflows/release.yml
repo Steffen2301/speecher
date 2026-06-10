@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    name: Build Release & Create GitHub Release
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_16.app
+
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      # Wird aktiv sobald das Xcode-Projekt und Signing konfiguriert sind
+      # - name: Build & Archive
+      #   env:
+      #     APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      #   run: |
+      #     xcodebuild archive \
+      #       -scheme Speecher \
+      #       -destination 'platform=macOS' \
+      #       -archivePath build/Speecher.xcarchive \
+      #       DEVELOPMENT_TEAM=$APPLE_TEAM_ID
+
+      # - name: Export & Notarize
+      #   ...
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Speecher v${{ steps.version.outputs.VERSION }}
+          body_path: CHANGELOG.md
+          draft: true
+          prerelease: ${{ contains(github.ref, '-beta') || contains(github.ref, '-alpha') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,38 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build:
+    name: Build & Test (macOS)
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_16.app
+
+      - name: Build SpeecherCore Package
+        run: |
+          cd SpeecherCore
+          swift build
+
+      - name: Test SpeecherCore Package
+        run: |
+          cd SpeecherCore
+          swift test
+
+      # Xcode App Build (wird aktiv sobald das Xcode-Projekt existiert)
+      # - name: Build Speecher App
+      #   run: |
+      #     xcodebuild \
+      #       -scheme Speecher \
+      #       -destination 'platform=macOS' \
+      #       -configuration Debug \
+      #       build

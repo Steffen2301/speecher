@@ -1,0 +1,38 @@
+# Xcode
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xcworkspace/contents.xcworkspacedata
+DerivedData/
+.build/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.swiftpm/
+Package.resolved
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# Secrets / Keys
+*.pem
+*.key
+*.env
+*.env.local
+Secrets.swift
+
+# Build artifacts
+build/
+dist/
+*.dmg
+*.pkg
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
