@@ -66,12 +66,15 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · `[!]` blockiert
 - [ ] Streaming-Modus: Live-Transkription mit < 1,5 s Latenz (kommt mit Phase 1.5)
 
 ### 1.5 Korrektur- & Übersetzungs-Service
-- [ ] `CorrectionService`-Protokoll definieren
-- [ ] Cloud-Implementierung: Claude API (Anthropic)
-- [ ] Prompt-Design: Korrektur ohne inhaltliche Veränderung
-- [ ] Übersetzungs-Modus: aktiviert wenn Eingangs- ≠ Ausgabesprache
-- [ ] Lokal-Implementierung: Ollama (Mistral / Llama 3)
-- [ ] Streaming-Antwort: Wort-für-Wort-Ausgabe im UI
+- [x] `CorrectionService`-Protokoll + Factory mit Mode.isFree-Flag
+- [x] Kostenlos: Apple NSSpellChecker + Apple Translation (macOS 15+)
+- [x] Kostenlos: LanguageTool Public API (kein Key, 20 req/min)
+- [x] Kostenlos: Ollama lokales LLM (llama3.2 / mistral / phi4-mini)
+- [x] Kostenpflichtig opt-in: Claude API (Anthropic)
+- [x] Kostenpflichtig opt-in: OpenAI GPT
+- [x] Übersetzungs-Modus: aktiviert wenn Eingangs- ≠ Ausgabesprache
+- [x] Vollständige Pipeline: ASR → Korrektur → Text in AppState
+- [ ] Streaming-Antwort (Wort-für-Wort) – Phase 2
 
 ### 1.6 OutputService (Textausgabe)
 - [ ] `OutputService` implementieren
