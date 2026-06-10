@@ -97,10 +97,12 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · `[!]` blockiert
 - [ ] Onboarding: Accessibility-Berechtigung erklären + anfragen
 
 ### 1.8 Mehrsprachige UI (Lokalisierung)
-- [ ] `.xcstrings`-Datei anlegen
-- [ ] Alle UI-Texte lokalisieren: Deutsch
-- [ ] Alle UI-Texte lokalisieren: Englisch
-- [ ] Sprach-Auswahl in Einstellungen verknüpfen
+- [x] `de.lproj/Localizable.strings` + `en.lproj/Localizable.strings` (80+ Keys)
+- [x] Alle UI-Texte lokalisiert: Deutsch
+- [x] Alle UI-Texte lokalisiert: Englisch
+- [x] `LocalizationManager`: Runtime-Umschaltung ohne App-Neustart
+- [x] Sprach-Auswahl in Einstellungen → Allgemein verknüpft
+- [x] Statusmeldungen in AppState lokalisiert
 
 ### 1.9 Tests
 - [ ] Unit-Tests: `SettingsStore`
