@@ -79,10 +79,22 @@ private struct ModelsSettingsTab: View {
 // MARK: - Microphone
 
 private struct MicrophoneSettingsTab: View {
+    @EnvironmentObject private var appState: AppState
+
     var body: some View {
         Form {
-            Text("Mikrofon-Auswahl wird in Phase 1.3 implementiert.")
-                .foregroundStyle(.secondary)
+            Section("Eingabegerät") {
+                Picker("Mikrofon", selection: $appState.audioDeviceManager.selectedDevice) {
+                    ForEach(appState.audioDeviceManager.inputDevices) { device in
+                        Text(device.name).tag(device)
+                    }
+                }
+
+                Button("Geräteliste aktualisieren") {
+                    appState.audioDeviceManager.refresh()
+                }
+                .buttonStyle(.link)
+            }
         }
         .padding(20)
     }

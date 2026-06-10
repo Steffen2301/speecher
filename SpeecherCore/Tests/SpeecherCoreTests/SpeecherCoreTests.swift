@@ -1,6 +1,8 @@
-import Testing
+import XCTest
 @testable import SpeecherCore
 
-@Test func versionIsSet() {
-    #expect(!SpeecherCore.version.isEmpty)
+final class SpeecherCoreTests: XCTestCase {
+    func testVersionIsSet() {
+        XCTAssertFalse(SpeecherCore.version.isEmpty)
+    }
 }
