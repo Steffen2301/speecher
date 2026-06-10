@@ -154,6 +154,12 @@ private struct CorrectionSettingsTab: View {
                 ForEach(paidOptions, id: \.self) { modeRow($0) }
             }
 
+            if appState.correctionMode == .languageTool || appState.correctionMode == .appleBuiltin {
+                Text(locale.t("settings.correction.llm_hint"))
+                    .font(.caption).foregroundStyle(.secondary)
+                    .padding(.top, 2)
+            }
+
             if appState.correctionMode == .ollama {
                 Section(locale.t("settings.correction.ollama_section")) {
                     HStack {

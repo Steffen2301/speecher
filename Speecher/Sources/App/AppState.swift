@@ -15,7 +15,7 @@ final class AppState: ObservableObject {
     @AppStorage("uiLanguage")           var uiLanguage           = "de"
     @AppStorage("asrMode")              var asrMode              = ASRMode.appleSpeech
     @AppStorage("whisperModel")         var whisperModelRaw      = WhisperKitService.WhisperModel.base.rawValue
-    @AppStorage("correctionMode")       var correctionModeRaw    = CorrectionServiceFactory.Mode.appleBuiltin.rawValue
+    @AppStorage("correctionMode")       var correctionModeRaw    = CorrectionServiceFactory.Mode.languageTool.rawValue
     @AppStorage("ollamaModel")          var ollamaModel          = "llama3.2"
     @AppStorage("ollamaHost")           var ollamaHost           = "http://localhost:11434"
     @AppStorage("onboardingDone")       var hasCompletedOnboarding = false
@@ -30,7 +30,7 @@ final class AppState: ObservableObject {
         set { correctionModeRaw = newValue.rawValue }
     }
 
-    let audioRecorder        = AudioRecorder(chunkDuration: 5.0)
+    let audioRecorder        = AudioRecorder(chunkDuration: 10.0)
     let audioDeviceManager   = AudioDeviceManager()
     let audioFileProcessor   = AudioFileProcessor()
     let modelDownloadManager = ModelDownloadManager()
@@ -44,13 +44,15 @@ final class AppState: ObservableObject {
         case appleSpeech = "appleSpeech"
     }
 
+    // Session-Counter verhindert dass alte async Tasks in neue Sessions schreiben
+    private var currentSessionID: Int = 0
+
     // MARK: - Recording
 
     func toggleRecording() {
         if isRecording {
             stopRecording()
         } else {
-            // Cursor-Position VOR dem Starten merken – noch in der Ziel-App aktiv
             outputService.saveFocus()
             Task { await startRecording() }
         }
@@ -59,18 +61,22 @@ final class AppState: ObservableObject {
     private func startRecording() async {
         guard await ensureMicrophonePermission() else { return }
 
+        // Session-ID hochzählen → alle laufenden Tasks der Vorsession werden ungültig
+        currentSessionID += 1
+        let sessionID = currentSessionID
+
         statusMessage = locale?.t("status.loading_model") ?? "Lade Modell …"
         let asrService        = makeASRService()
         let correctionService = makeCorrectionService()
 
-        // Neues Diktat: Textfeld und Fehler zurücksetzen
         transcribedText = ""
         errorMessage = nil
         lastOutputResult = nil
 
         audioRecorder.onChunk = { @Sendable [weak self] chunk in
             Task { [weak self] in
-                await self?.handleChunk(chunk, asr: asrService, correction: correctionService)
+                guard let self, await self.currentSessionID == sessionID else { return }
+                await self.handleChunk(chunk, asr: asrService, correction: correctionService, sessionID: sessionID)
             }
         }
 
@@ -98,23 +104,27 @@ final class AppState: ObservableObject {
     private func handleChunk(
         _ chunk: AudioChunk,
         asr: any ASRService,
-        correction: any CorrectionService
+        correction: any CorrectionService,
+        sessionID: Int
     ) async {
         isProcessing = true
         defer { isProcessing = false }
         do {
             let asrResult = try await asr.transcribe(chunk, language: inputLanguage)
             guard !asrResult.isEmpty else { return }
+            // Session-Check nach dem langen ASR-Await
+            guard currentSessionID == sessionID else { return }
 
             let corrResult = try await correction.correct(
                 asrResult.text,
                 sourceLang: inputLanguage,
                 targetLang: outputLanguage
             )
+            // Session-Check nach dem langen Korrektur-Await
+            guard currentSessionID == sessionID else { return }
 
             let text = corrResult.correctedText
 
-            // OutputService: zuerst an Cursor, dann Fallback
             let outputResult = await outputService.insert(text)
             lastOutputResult = outputResult
             statusMessage = outputResultMessage(outputResult, backend: corrResult.backend)
@@ -129,6 +139,11 @@ final class AppState: ObservableObject {
     }
 
     func transcribeFile(url: URL) {
+        currentSessionID += 1
+        let fileSessionID = currentSessionID
+        transcribedText = ""
+        errorMessage = nil
+        lastOutputResult = nil
         Task {
             isProcessing = true
             statusMessage = "Lade Modell …"

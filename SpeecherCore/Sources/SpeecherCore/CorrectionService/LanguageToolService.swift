@@ -52,8 +52,11 @@ public final class LanguageToolService: CorrectionService {
     // MARK: - LanguageTool
 
     private func languageToolCheck(_ text: String, language: String) async throws -> String {
-        var components = URLComponents(url: endpoint, resolvingAgainstBaseURL: false)!
-        components.queryItems = [
+        // Bei zu kurzem Text LanguageTool überspringen
+        guard text.split(separator: " ").count >= 3 else { return text }
+
+        var body = URLComponents()
+        body.queryItems = [
             URLQueryItem(name: "text", value: text),
             URLQueryItem(name: "language", value: ltLanguageCode(language)),
             URLQueryItem(name: "enabledOnly", value: "false"),
@@ -63,13 +66,21 @@ public final class LanguageToolService: CorrectionService {
         request.httpMethod = "POST"
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.setValue("Speecher/1.0", forHTTPHeaderField: "User-Agent")
-        request.httpBody = components.percentEncodedQuery?.data(using: .utf8)
+        request.timeoutInterval = 10
+        request.httpBody = body.percentEncodedQuery?.data(using: .utf8)
 
-        let (data, response) = try await session.data(for: request)
+        let (data, response): (Data, URLResponse)
+        do {
+            (data, response) = try await session.data(for: request)
+        } catch {
+            // Netzwerkfehler: unkorrigierten Text zurückgeben
+            return text
+        }
 
-        guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
-            let code = (response as? HTTPURLResponse)?.statusCode ?? -1
-            throw CorrectionError.invalidResponse("HTTP \(code)")
+        guard let http = response as? HTTPURLResponse else { return text }
+        guard http.statusCode == 200 else {
+            // Rate-Limit (429) oder Server-Fehler → unkorrigiert zurück
+            return text
         }
 
         return try applyMatches(to: text, data: data)
@@ -92,7 +103,7 @@ public final class LanguageToolService: CorrectionService {
         do {
             decoded = try JSONDecoder().decode(LTResponse.self, from: data)
         } catch {
-            throw CorrectionError.invalidResponse("JSON-Fehler: \(error.localizedDescription)")
+            return original  // Bei Parse-Fehler: unkorrigiert zurück
         }
 
         guard !decoded.matches.isEmpty else { return original }

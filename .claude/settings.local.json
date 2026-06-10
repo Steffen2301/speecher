@@ -23,7 +23,8 @@
       "Bash(python3 -c ' *)",
       "Bash(python3 *)",
       "Bash(defaults delete *)",
-      "Bash(afplay /tmp/test_speech.aiff)"
+      "Bash(afplay /tmp/test_speech.aiff)",
+      "Bash(swift test *)"
     ]
   }
 }

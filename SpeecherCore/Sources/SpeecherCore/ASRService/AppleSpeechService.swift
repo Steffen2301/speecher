@@ -57,8 +57,10 @@ public final class AppleSpeechService: ASRService {
                     return
                 }
                 guard let result, result.isFinal else { return }
+                let raw = result.bestTranscription.formattedString
+                let cleaned = ASRTextCleaner.clean(raw, language: language)
                 continuation.resume(returning: ASRResult(
-                    text: result.bestTranscription.formattedString,
+                    text: cleaned,
                     detectedLanguage: language,
                     audioDuration: chunk.duration,
                     sequenceNumber: chunk.sequenceNumber,
