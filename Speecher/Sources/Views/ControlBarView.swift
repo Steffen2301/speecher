@@ -42,6 +42,12 @@ struct ControlBarView: View {
                 ProgressView().scaleEffect(0.7).padding(.trailing, 4)
             }
 
+            // Output-Indikator
+            if let result = appState.lastOutputResult, !appState.isRecording {
+                OutputResultBadge(result: result)
+                    .transition(.opacity)
+            }
+
             // Statusanzeige
             if let error = appState.errorMessage {
                 Label(error, systemImage: "exclamationmark.triangle")
@@ -94,6 +100,47 @@ struct ControlBarView: View {
 
     private func processAudioFile(url: URL) {
         appState.transcribeFile(url: url)
+    }
+}
+
+// MARK: - Output-Indikator
+
+private struct OutputResultBadge: View {
+    let result: OutputResult
+
+    var body: some View {
+        Label(label, systemImage: icon)
+            .font(.caption)
+            .foregroundStyle(color)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
+            .background(color.opacity(0.12), in: Capsule())
+    }
+
+    private var icon: String {
+        switch result {
+        case .insertedAtCursor:    return "text.cursor"
+        case .pastedViaSimulation: return "doc.on.clipboard"
+        case .copiedToClipboard:   return "clipboard"
+        case .noTargetSaved:       return "textformat"
+        }
+    }
+
+    private var label: String {
+        switch result {
+        case .insertedAtCursor:    return "An Cursor"
+        case .pastedViaSimulation: return "Eingefügt"
+        case .copiedToClipboard:   return "Zwischenablage"
+        case .noTargetSaved:       return "Textfeld"
+        }
+    }
+
+    private var color: Color {
+        switch result {
+        case .insertedAtCursor, .pastedViaSimulation: return .green
+        case .copiedToClipboard:                      return .orange
+        case .noTargetSaved:                          return .secondary
+        }
     }
 }
 

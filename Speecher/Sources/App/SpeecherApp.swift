@@ -6,16 +6,21 @@ struct SpeecherApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(appState)
+            Group {
+                if !appState.hasCompletedOnboarding {
+                    OnboardingView()
+                        .environmentObject(appState)
+                } else {
+                    ContentView()
+                        .environmentObject(appState)
+                }
+            }
         }
         .windowStyle(.hiddenTitleBar)
         .windowResizability(.contentSize)
-        .commands {
-            AppCommands()
-        }
+        .commands { AppCommands() }
 
-        MenuBarExtra("Speecher", systemImage: "mic.circle") {
+        MenuBarExtra("Speecher", systemImage: appState.isRecording ? "mic.circle.fill" : "mic.circle") {
             MenuBarView()
                 .environmentObject(appState)
         }

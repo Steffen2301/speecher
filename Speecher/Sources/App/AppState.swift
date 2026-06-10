@@ -8,6 +8,7 @@ final class AppState: ObservableObject {
     @Published var statusMessage = ""
     @Published var errorMessage: String?
     @Published var isProcessing = false
+    @Published var lastOutputResult: OutputResult?
 
     @AppStorage("inputLanguage")        var inputLanguage        = "de"
     @AppStorage("outputLanguage")       var outputLanguage       = "de"
@@ -17,6 +18,7 @@ final class AppState: ObservableObject {
     @AppStorage("correctionMode")       var correctionModeRaw    = CorrectionServiceFactory.Mode.appleBuiltin.rawValue
     @AppStorage("ollamaModel")          var ollamaModel          = "llama3.2"
     @AppStorage("ollamaHost")           var ollamaHost           = "http://localhost:11434"
+    @AppStorage("onboardingDone")       var hasCompletedOnboarding = false
 
     var whisperModel: WhisperKitService.WhisperModel {
         get { .init(rawValue: whisperModelRaw) ?? .base }
@@ -32,6 +34,7 @@ final class AppState: ObservableObject {
     let audioDeviceManager   = AudioDeviceManager()
     let audioFileProcessor   = AudioFileProcessor()
     let modelDownloadManager = ModelDownloadManager()
+    let outputService        = AccessibilityOutputService()
 
     enum ASRMode: String, CaseIterable {
         case whisperKit  = "whisperKit"
@@ -41,15 +44,21 @@ final class AppState: ObservableObject {
     // MARK: - Recording
 
     func toggleRecording() {
-        isRecording ? stopRecording() : Task { await startRecording() }
+        if isRecording {
+            stopRecording()
+        } else {
+            // Cursor-Position VOR dem Starten merken – noch in der Ziel-App aktiv
+            outputService.saveFocus()
+            Task { await startRecording() }
+        }
     }
 
     private func startRecording() async {
         guard await ensureMicrophonePermission() else { return }
 
         statusMessage = "Lade Modell …"
-        let asrService         = makeASRService()
-        let correctionService  = makeCorrectionService()
+        let asrService        = makeASRService()
+        let correctionService = makeCorrectionService()
 
         audioRecorder.onChunk = { [weak self] chunk in
             Task { [weak self] in
@@ -74,7 +83,7 @@ final class AppState: ObservableObject {
         statusMessage = ""
     }
 
-    // MARK: - Pipeline: Chunk → ASR → Korrektur → Text
+    // MARK: - Pipeline: Chunk → ASR → Korrektur → Output
 
     private func handleChunk(
         _ chunk: AudioChunk,
@@ -82,9 +91,10 @@ final class AppState: ObservableObject {
         correction: any CorrectionService
     ) async {
         isProcessing = true
+        defer { isProcessing = false }
         do {
             let asrResult = try await asr.transcribe(chunk, language: inputLanguage)
-            guard !asrResult.isEmpty else { isProcessing = false; return }
+            guard !asrResult.isEmpty else { return }
 
             let corrResult = try await correction.correct(
                 asrResult.text,
@@ -92,13 +102,20 @@ final class AppState: ObservableObject {
                 targetLang: outputLanguage
             )
 
-            if !transcribedText.isEmpty { transcribedText += " " }
-            transcribedText += corrResult.correctedText
-            statusMessage = corrResult.backend
+            let text = corrResult.correctedText
+
+            // OutputService: zuerst an Cursor, dann Fallback
+            let outputResult = await outputService.insert(text)
+            lastOutputResult = outputResult
+            statusMessage = outputResultMessage(outputResult, backend: corrResult.backend)
+
+            // Immer auch ins eigene Textfeld schreiben (Protokoll / Fallback-Anzeige)
+            if !transcribedText.isEmpty { transcribedText += "\n" }
+            transcribedText += text
+
         } catch {
             errorMessage = error.localizedDescription
         }
-        isProcessing = false
     }
 
     func transcribeFile(url: URL) {
@@ -108,6 +125,7 @@ final class AppState: ObservableObject {
             let asrService        = makeASRService()
             let correctionService = makeCorrectionService()
             var count = 0
+            var fullText = ""
             do {
                 for try await chunk in audioFileProcessor.chunks(from: url) {
                     let asr = try await asrService.transcribe(chunk, language: inputLanguage)
@@ -115,12 +133,20 @@ final class AppState: ObservableObject {
                     let corr = try await correctionService.correct(
                         asr.text, sourceLang: inputLanguage, targetLang: outputLanguage
                     )
-                    if !transcribedText.isEmpty { transcribedText += " " }
-                    transcribedText += corr.correctedText
+                    fullText += (fullText.isEmpty ? "" : " ") + corr.correctedText
                     count += 1
                     statusMessage = "Segment \(count) – \(corr.backend)"
                 }
-                statusMessage = "\(count) Segment(e) fertig."
+                // Gesamten Text auf einmal ausgeben
+                if !fullText.isEmpty {
+                    let result = await outputService.insert(fullText)
+                    lastOutputResult = result
+                    if !transcribedText.isEmpty { transcribedText += "\n" }
+                    transcribedText += fullText
+                    statusMessage = outputResultMessage(result, backend: "\(count) Segmente")
+                } else {
+                    statusMessage = "Keine Sprache erkannt."
+                }
             } catch {
                 errorMessage = error.localizedDescription
                 statusMessage = ""
@@ -151,7 +177,16 @@ final class AppState: ObservableObject {
         )
     }
 
-    // MARK: - Permission
+    // MARK: - Helper
+
+    private func outputResultMessage(_ result: OutputResult, backend: String) -> String {
+        switch result {
+        case .insertedAtCursor:     return "✓ An Cursor eingefügt · \(backend)"
+        case .pastedViaSimulation:  return "✓ Eingefügt (Cmd+V) · \(backend)"
+        case .copiedToClipboard:    return "In Zwischenablage · ⌘V zum Einfügen"
+        case .noTargetSaved:        return "Kein Ziel gespeichert · Text im Textfeld"
+        }
+    }
 
     private func ensureMicrophonePermission() async -> Bool {
         switch MicrophonePermission.current {
