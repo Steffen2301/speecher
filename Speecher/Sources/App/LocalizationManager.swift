@@ -76,6 +76,7 @@ final class LocalizationManager: ObservableObject {
         "settings.tab.speech":     "Sprache",
         "settings.tab.correction": "Korrektur",
         "settings.tab.microphone": "Mikrofon",
+        "settings.tab.hotkey":     "Kurzbefehl",
         // Settings – General
         "settings.ui_language": "Oberflächen-Sprache",
         // Settings – ASR
@@ -170,6 +171,7 @@ final class LocalizationManager: ObservableObject {
         "settings.tab.speech":     "Speech",
         "settings.tab.correction": "Correction",
         "settings.tab.microphone": "Microphone",
+        "settings.tab.hotkey":     "Shortcut",
         // Settings – General
         "settings.ui_language": "Interface Language",
         // Settings – ASR

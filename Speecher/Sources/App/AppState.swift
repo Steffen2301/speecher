@@ -35,9 +35,15 @@ final class AppState: ObservableObject {
     let audioFileProcessor   = AudioFileProcessor()
     let modelDownloadManager = ModelDownloadManager()
     let outputService        = AccessibilityOutputService()
+    let hotkeyManager        = GlobalHotkeyManager()
 
-    // Wird von SpeecherApp gesetzt, damit Statusmeldungen lokalisiert sind
     var locale: LocalizationManager?
+
+    func setupHotkey() {
+        hotkeyManager.onTrigger = { [weak self] in
+            self?.toggleRecording()
+        }
+    }
 
     enum ASRMode: String, CaseIterable {
         case whisperKit  = "whisperKit"

@@ -8,7 +8,7 @@ struct AppCommands: Commands {
 
         CommandMenu(locale.t("commands.recording_menu")) {
             Button(locale.t("commands.toggle")) {}
-                .keyboardShortcut("m", modifiers: [.command, .shift])
+            // Shortcut wird dynamisch vom GlobalHotkeyManager verwaltet
         }
     }
 }

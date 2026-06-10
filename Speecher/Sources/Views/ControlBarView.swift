@@ -19,7 +19,6 @@ struct ControlBarView: View {
                 .font(.title3)
             }
             .buttonStyle(.plain)
-            .keyboardShortcut("m", modifiers: [.command, .shift])
 
             // VU-Meter
             if appState.isRecording {

@@ -24,7 +24,22 @@
       "Bash(python3 *)",
       "Bash(defaults delete *)",
       "Bash(afplay /tmp/test_speech.aiff)",
-      "Bash(swift test *)"
+      "Bash(swift test *)",
+      "Bash(ollama --version)",
+      "Bash(curl -s http://localhost:11434/api/tags)",
+      "Bash(brew install *)",
+      "Bash(ollama serve *)",
+      "Bash(ollama pull *)",
+      "Bash(echo \"Modell-Download gestartet \\(PID: $!\\)\")",
+      "Bash(defaults write *)",
+      "Bash(curl -s http://localhost:11434/api/chat -d '{ *)",
+      "Bash(brew uninstall *)",
+      "Bash(curl -L \"https://ollama.com/download/Ollama-darwin.zip\" -o /tmp/Ollama.zip)",
+      "Bash(echo \"Download läuft \\(PID: $!\\)\")",
+      "Bash(wait)",
+      "Bash(unzip -q /tmp/Ollama.zip -d /tmp/OllamaApp)",
+      "Bash(cp -R /tmp/OllamaApp/Ollama.app /Applications/)",
+      "Bash(open /Applications/Ollama.app)"
     ]
   }
 }

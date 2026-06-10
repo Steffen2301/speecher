@@ -17,7 +17,9 @@
 		7A6D1543A389D874D87137F1 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98B9DE923FB6B3F4A1CE2B9D /* MenuBarView.swift */; };
 		818F7CFB79B0851BC9B0579A /* ControlBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2ABFCB4E5FCAB7DEC69F569 /* ControlBarView.swift */; };
 		9C6BF755D31CD04A21C769CC /* AccessibilityPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD5A77AF98A82EF75EC6406 /* AccessibilityPermission.swift */; };
+		9FFC2B88038FC4DB3BAE7040 /* HotkeyRecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2470F764D7FBF978424151B /* HotkeyRecorderView.swift */; };
 		A4DE5E19F65CC35A9F05E726 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DAD33CBAA62350C4DD3FF2 /* SettingsView.swift */; };
+		B328651D94C44349DA7D4D9B /* GlobalHotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45F287F1A272B75BE3AD916 /* GlobalHotkeyManager.swift */; };
 		B873C25AF1687429F412204C /* SpeecherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39DDF74BD0C705392DBF59D8 /* SpeecherTests.swift */; };
 		C605810A52B567AD6B703637 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 816ADC2F8F29E2E67599D051 /* ContentView.swift */; };
 		F47D028002F1914C8133761A /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88BD1564256D11C59DB952E9 /* AppState.swift */; };
@@ -49,9 +51,11 @@
 		89FFD08E3CAF5105234A3F35 /* LocalizationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationManager.swift; sourceTree = "<group>"; };
 		98B9DE923FB6B3F4A1CE2B9D /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		9CFF4347B811A67333128807 /* SpeecherCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SpeecherCore; path = SpeecherCore; sourceTree = SOURCE_ROOT; };
+		C45F287F1A272B75BE3AD916 /* GlobalHotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalHotkeyManager.swift; sourceTree = "<group>"; };
 		CE39AAE22285399E49135047 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		D2ABFCB4E5FCAB7DEC69F569 /* ControlBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlBarView.swift; sourceTree = "<group>"; };
 		D8DAD33CBAA62350C4DD3FF2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		F2470F764D7FBF978424151B /* HotkeyRecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyRecorderView.swift; sourceTree = "<group>"; };
 		F49866D1005395B2D8970852 /* AppCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCommands.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -135,6 +139,7 @@
 			children = (
 				816ADC2F8F29E2E67599D051 /* ContentView.swift */,
 				D2ABFCB4E5FCAB7DEC69F569 /* ControlBarView.swift */,
+				F2470F764D7FBF978424151B /* HotkeyRecorderView.swift */,
 				98B9DE923FB6B3F4A1CE2B9D /* MenuBarView.swift */,
 				CE39AAE22285399E49135047 /* OnboardingView.swift */,
 				D8DAD33CBAA62350C4DD3FF2 /* SettingsView.swift */,
@@ -149,6 +154,7 @@
 			children = (
 				64B0F3AAB84D55E9210C84E3 /* AccessibilityOutputService.swift */,
 				4BD5A77AF98A82EF75EC6406 /* AccessibilityPermission.swift */,
+				C45F287F1A272B75BE3AD916 /* GlobalHotkeyManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -256,6 +262,8 @@
 				F47D028002F1914C8133761A /* AppState.swift in Sources */,
 				C605810A52B567AD6B703637 /* ContentView.swift in Sources */,
 				818F7CFB79B0851BC9B0579A /* ControlBarView.swift in Sources */,
+				B328651D94C44349DA7D4D9B /* GlobalHotkeyManager.swift in Sources */,
+				9FFC2B88038FC4DB3BAE7040 /* HotkeyRecorderView.swift in Sources */,
 				5AE62080AF82F1C893D418EF /* LocalizationManager.swift in Sources */,
 				7A6D1543A389D874D87137F1 /* MenuBarView.swift in Sources */,
 				3EA2F8138AA395DA14862034 /* OnboardingView.swift in Sources */,

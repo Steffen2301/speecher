@@ -16,7 +16,10 @@ struct SpeecherApp: App {
             }
             .environmentObject(appState)
             .environmentObject(locale)
-            .onAppear { appState.locale = locale }
+            .onAppear {
+                appState.locale = locale
+                appState.setupHotkey()
+            }
         }
         .windowStyle(.hiddenTitleBar)
         .windowResizability(.contentSize)

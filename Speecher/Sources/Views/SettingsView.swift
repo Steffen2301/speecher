@@ -15,8 +15,10 @@ struct SettingsView: View {
                 .tabItem { Label(locale.t("settings.tab.correction"), systemImage: "text.badge.checkmark") }
             MicrophoneSettingsTab()
                 .tabItem { Label(locale.t("settings.tab.microphone"), systemImage: "mic") }
+            HotkeySettingsTab()
+                .tabItem { Label("Kurzbefehl", systemImage: "keyboard") }
         }
-        .frame(width: 560, height: 460)
+        .frame(width: 560, height: 500)
         .environmentObject(appState)
         .environmentObject(locale)
     }
@@ -238,6 +240,46 @@ private struct CorrectionSettingsTab: View {
             host: URL(string: appState.ollamaHost) ?? OllamaService.defaultHost
         )
         ollamaReachable = await svc.isReachable()
+    }
+}
+
+// MARK: - Hotkey
+
+private struct HotkeySettingsTab: View {
+    @EnvironmentObject private var appState: AppState
+
+    var body: some View {
+        Form {
+            Section("Globaler Kurzbefehl") {
+                HStack {
+                    Text("Aufnahme starten / stoppen")
+                    Spacer()
+                    HotkeyRecorderView(manager: appState.hotkeyManager)
+                }
+
+                Text("Der Kurzbefehl wirkt systemweit – auch wenn Speecher im Hintergrund läuft. Dazu ist die Accessibility-Berechtigung erforderlich.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            if !AccessibilityPermission.isGranted {
+                Section {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.orange)
+                        Text("Accessibility-Berechtigung fehlt – globaler Kurzbefehl nicht aktiv.")
+                            .font(.caption)
+                        Spacer()
+                        Button("Einstellungen öffnen") {
+                            AccessibilityPermission.openSystemSettings()
+                        }
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
+                    }
+                }
+            }
+        }
+        .padding(20)
     }
 }
 
