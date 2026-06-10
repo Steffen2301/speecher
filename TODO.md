@@ -1,6 +1,6 @@
 # Speecher – Todo-Liste
 
-**Letzte Aktualisierung:** 2026-06-10 (AudioEngine fertig)  
+**Letzte Aktualisierung:** 2026-06-10 (ASR-Service fertig)  
 Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · `[!]` blockiert
 
 ---
@@ -56,13 +56,14 @@ Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · `[!]` blockiert
 - [x] Aufnahme-Pegel-Anzeige (VU-Meter) im UI
 
 ### 1.4 ASR-Service (Spracherkennung)
-- [ ] `ASRService`-Protokoll definieren
-- [ ] Cloud-Implementierung: Whisper API (OpenAI)
-- [ ] Lokal-Implementierung: Whisper.cpp (on-device)
-- [ ] Whisper.cpp: Modell-Download-Manager mit Fortschrittsanzeige
-- [ ] Streaming-Modus: Live-Transkription mit < 1,5 s Latenz
-- [ ] Batch-Modus: Audiodatei-Verarbeitung mit Fortschrittsanzeige
-- [ ] Fehlerbehandlung: Netzwerkfehler, Modell nicht geladen, etc.
+- [x] `ASRService`-Protokoll definieren + Factory
+- [x] Cloud-Implementierung: Whisper API (OpenAI)
+- [x] Lokal-Implementierung: Apple SFSpeechRecognizer (on-device, Phase 1)
+- [x] Whisper.cpp: Modell-Download-Manager mit Fortschrittsanzeige (Phase 2 ready)
+- [x] Batch-Modus: Audiodatei-Verarbeitung (AsyncThrowingStream)
+- [x] Fehlerbehandlung: Netzwerk, Permission, API-Key, Decoding
+- [x] KeychainManager: sichere API-Key-Speicherung
+- [ ] Streaming-Modus: Live-Transkription mit < 1,5 s Latenz (kommt mit Phase 1.5)
 
 ### 1.5 Korrektur- & Übersetzungs-Service
 - [ ] `CorrectionService`-Protokoll definieren
