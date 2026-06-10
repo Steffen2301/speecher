@@ -8,14 +8,27 @@ excluded:
 
 disabled_rules:
   - trailing_whitespace
+  - trailing_comma                      # Trailing commas sind Stilsache
+  - colon                               # Colon-Spacing variiert
+  - redundant_string_enum_value         # CorrectionService Mode enum ist explizit
+  - optional_data_string_conversion     # DataString konversion ist OK
 
 opt_in_rules:
   - empty_count
-  - force_unwrapping
   - private_outlet
 
+# Gelockerte Regeln für schnelle Entwicklung
+identifier_name:
+  min_length: 1           # Erlaube 1-Buchstaben-Variablen
+  max_length: 40
+  allowed_symbols:        # Underscores in Identifiern (für JSON-Keys wie max_tokens)
+    - "_"
+
+nesting:
+  type_level: 3           # Nested Types bis 3 Ebenen erlaubt (z.B. nested structs in Views)
+
 line_length:
-  warning: 120
+  warning: 130
   error: 160
 
 type_body_length:

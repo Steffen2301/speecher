@@ -43,9 +43,13 @@ public final class OpenAIService: CorrectionService {
             let temperature: Double
         }
 
-        let system = translate
-            ? "You are a professional editor and translator. Correct grammar and spelling errors, then translate from \(sourceLang) to \(targetLang). Return ONLY the final text, no comments."
-            : "You are a professional editor. Correct grammar and spelling errors. Do not change content or style. Return ONLY the corrected text, no comments."
+        let translatePrompt = "You are a professional editor and translator. " +
+            "Correct grammar and spelling errors, then translate from \(sourceLang) to \(targetLang). " +
+            "Return ONLY the final text, no comments."
+        let correctPrompt = "You are a professional editor. " +
+            "Correct grammar and spelling errors. Do not change content or style. " +
+            "Return ONLY the corrected text, no comments."
+        let system = translate ? translatePrompt : correctPrompt
 
         let body = Body(
             model: model,

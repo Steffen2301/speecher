@@ -75,8 +75,16 @@ public final class ClaudeAPIService: CorrectionService {
 
     private func systemPrompt(translate: Bool, sourceLang: String, targetLang: String) -> String {
         if translate {
-            return "Du bist ein professioneller Lektor und Übersetzer. Korrigiere Rechtschreib- und Grammatikfehler und übersetze von \(sourceLang) nach \(targetLang). Gib NUR den fertigen Text zurück, ohne Kommentare."
+            let prompt = "Du bist ein professioneller Lektor und Übersetzer. "
+            let correction = "Korrigiere Rechtschreib- und Grammatikfehler "
+            let translation = "und übersetze von \(sourceLang) nach \(targetLang). "
+            let instruction = "Gib NUR den fertigen Text zurück, ohne Kommentare."
+            return prompt + correction + translation + instruction
         }
-        return "Du bist ein professioneller Lektor. Korrigiere Rechtschreib- und Grammatikfehler. Verändere Inhalt und Stil nicht. Gib NUR den korrigierten Text zurück, ohne Kommentare."
+        let prompt = "Du bist ein professioneller Lektor. "
+        let correction = "Korrigiere Rechtschreib- und Grammatikfehler. "
+        let style = "Verändere Inhalt und Stil nicht. "
+        let instruction = "Gib NUR den korrigierten Text zurück, ohne Kommentare."
+        return prompt + correction + style + instruction
     }
 }

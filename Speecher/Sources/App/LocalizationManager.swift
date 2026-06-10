@@ -63,7 +63,7 @@ final class LocalizationManager: ObservableObject {
         "menubar.quit":            "Beenden",
         // Onboarding
         "onboarding.title":       "Bedienungshilfen erlauben",
-        "onboarding.description": "Speecher benötigt Zugriff auf die Bedienungshilfen, um Text direkt an der Cursor-Position in anderen Apps einzufügen (Mail, Word, Pages …).",
+        "onboarding.description": "Speecher braucht Accessibility-Zugriff, um Text direkt an der Cursor-Position in anderen Apps einzufügen.",
         "onboarding.granted":     "Berechtigung erteilt",
         "onboarding.done":        "Fertig",
         "onboarding.open_settings": "Systemeinstellungen öffnen",

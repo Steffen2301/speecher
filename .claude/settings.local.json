@@ -39,7 +39,10 @@
       "Bash(wait)",
       "Bash(unzip -q /tmp/Ollama.zip -d /tmp/OllamaApp)",
       "Bash(cp -R /tmp/OllamaApp/Ollama.app /Applications/)",
-      "Bash(open /Applications/Ollama.app)"
+      "Bash(open /Applications/Ollama.app)",
+      "Bash(gh run *)",
+      "Bash(awk -F'\\\\t' '{print $3}')",
+      "Bash(swiftlint lint *)"
     ]
   }
 }

@@ -81,9 +81,9 @@ final class GlobalHotkeyManager: ObservableObject {
 
     // MARK: - Persistence
 
-    private static func saveToDefaults(_ s: HotkeyShortcut) {
-        UserDefaults.standard.set(Int(s.keyCode), forKey: keyCodeKey)
-        UserDefaults.standard.set(s.modifiers.rawValue, forKey: modifiersKey)
+    private static func saveToDefaults(_ shortcut: HotkeyShortcut) {
+        UserDefaults.standard.set(Int(shortcut.keyCode), forKey: keyCodeKey)
+        UserDefaults.standard.set(shortcut.modifiers.rawValue, forKey: modifiersKey)
     }
 
     private static func loadFromDefaults() -> HotkeyShortcut {
