@@ -11,9 +11,24 @@ public actor WhisperKitService: ASRService {
         self.modelName = model.identifier
     }
 
+    // MARK: - Platform Check
+
+    /// WhisperKit nutzt Core ML mit Neural Engine – primär Apple Silicon.
+    /// Auf Intel (x86_64) wird Apple Speech als Fallback empfohlen.
+    public static var isSupported: Bool {
+        #if arch(arm64)
+        return true
+        #else
+        return false   // Intel: Core ML-Inferenz kann crashen
+        #endif
+    }
+
     // MARK: - ASRService
 
     public func transcribe(_ chunk: AudioChunk, language: String) async throws -> ASRResult {
+        guard Self.isSupported else {
+            throw ASRError.inferenceError("WhisperKit erfordert Apple Silicon (M1+). Bitte Apple Speech in den Einstellungen wählen.")
+        }
         let whisper = try await loadKit()
 
         let samples = chunk.data.withUnsafeBytes {

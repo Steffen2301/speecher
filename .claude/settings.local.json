@@ -19,7 +19,10 @@
       "Bash(osascript *)",
       "Bash(pkill -x Speecher)",
       "Bash(xcodebuild -scheme Speecher -destination 'platform=macOS' -configuration Debug CODE_SIGNING_ALLOWED=NO build)",
-      "Bash(open \"/Users/steffen/Library/Developer/Xcode/DerivedData/Speecher-gunuuyhcpjkneifzfmadvaqyqpds/Build/Products/Debug/Speecher.app\")"
+      "Bash(open \"/Users/steffen/Library/Developer/Xcode/DerivedData/Speecher-gunuuyhcpjkneifzfmadvaqyqpds/Build/Products/Debug/Speecher.app\")",
+      "Bash(python3 -c ' *)",
+      "Bash(python3 *)",
+      "Bash(defaults delete *)"
     ]
   }
 }

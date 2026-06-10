@@ -13,7 +13,7 @@ final class AppState: ObservableObject {
     @AppStorage("inputLanguage")        var inputLanguage        = "de"
     @AppStorage("outputLanguage")       var outputLanguage       = "de"
     @AppStorage("uiLanguage")           var uiLanguage           = "de"
-    @AppStorage("asrMode")              var asrMode              = ASRMode.whisperKit
+    @AppStorage("asrMode")              var asrMode              = ASRMode.appleSpeech
     @AppStorage("whisperModel")         var whisperModelRaw      = WhisperKitService.WhisperModel.base.rawValue
     @AppStorage("correctionMode")       var correctionModeRaw    = CorrectionServiceFactory.Mode.appleBuiltin.rawValue
     @AppStorage("ollamaModel")          var ollamaModel          = "llama3.2"
@@ -63,7 +63,7 @@ final class AppState: ObservableObject {
         let asrService        = makeASRService()
         let correctionService = makeCorrectionService()
 
-        audioRecorder.onChunk = { [weak self] chunk in
+        audioRecorder.onChunk = { @Sendable [weak self] chunk in
             Task { [weak self] in
                 await self?.handleChunk(chunk, asr: asrService, correction: correctionService)
             }

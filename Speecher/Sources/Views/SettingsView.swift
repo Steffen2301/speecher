@@ -49,14 +49,27 @@ private struct ASRSettingsTab: View {
     @EnvironmentObject private var appState: AppState
     @EnvironmentObject private var locale: LocalizationManager
 
+    private var whisperKitLabel: String {
+        WhisperKitService.isSupported
+            ? locale.t("settings.asr.whisperkit")
+            : locale.t("settings.asr.whisperkit") + " (Apple Silicon)"
+    }
+
     var body: some View {
         Form {
             Section(locale.t("settings.asr.section")) {
                 Picker(locale.t("settings.asr.backend"), selection: $appState.asrMode) {
-                    Text(locale.t("settings.asr.whisperkit")).tag(AppState.ASRMode.whisperKit)
                     Text(locale.t("settings.asr.apple_speech")).tag(AppState.ASRMode.appleSpeech)
+                    Text(whisperKitLabel).tag(AppState.ASRMode.whisperKit)
                 }
                 .pickerStyle(.radioGroup)
+
+                if appState.asrMode == .whisperKit && !WhisperKitService.isSupported {
+                    Label("WhisperKit erfordert Apple Silicon (M1+). Auf Intel-Macs bitte Apple Speech verwenden.",
+                          systemImage: "exclamationmark.triangle.fill")
+                        .foregroundStyle(.orange)
+                        .font(.caption)
+                }
             }
 
             if appState.asrMode == .whisperKit {
