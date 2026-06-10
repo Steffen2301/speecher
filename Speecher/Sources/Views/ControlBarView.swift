@@ -37,6 +37,11 @@ struct ControlBarView: View {
 
             Spacer()
 
+            // Verarbeitungs-Indikator
+            if appState.isProcessing {
+                ProgressView().scaleEffect(0.7).padding(.trailing, 4)
+            }
+
             // Statusanzeige
             if let error = appState.errorMessage {
                 Label(error, systemImage: "exclamationmark.triangle")
@@ -88,21 +93,7 @@ struct ControlBarView: View {
     }
 
     private func processAudioFile(url: URL) {
-        Task {
-            appState.statusMessage = "Verarbeite \(url.lastPathComponent) …"
-            var chunkCount = 0
-            do {
-                for try await chunk in appState.audioFileProcessor.chunks(from: url) {
-                    chunkCount += 1
-                    appState.statusMessage = "Segment \(chunkCount) (\(String(format: "%.0f", chunk.duration))s) verarbeitet …"
-                    // Wird in Phase 1.4 an ASRService weitergegeben
-                }
-                appState.statusMessage = "\(chunkCount) Segment(e) aus \(url.lastPathComponent) verarbeitet."
-            } catch {
-                appState.errorMessage = error.localizedDescription
-                appState.statusMessage = ""
-            }
-        }
+        appState.transcribeFile(url: url)
     }
 }
 

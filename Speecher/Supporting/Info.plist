@@ -29,6 +29,10 @@
     <key>NSDocumentsFolderUsageDescription</key>
     <string>Speecher benötigt Zugriff auf Audiodateien, die Sie importieren möchten.</string>
 
+    <!-- Apple Speech Recognition -->
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>Speecher nutzt die Spracherkennung, um gesprochenen Text zu transkribieren.</string>
+
     <!-- Accessibility für Cursor-Injection -->
     <key>NSAccessibilityUsageDescription</key>
     <string>Speecher benötigt Zugriff auf die Bedienungshilfen, um Text direkt an der Cursor-Position einzufügen.</string>
